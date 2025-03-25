@@ -1,0 +1,82 @@
+#startScene {
+  height: 100vh;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 1s ease;
+  overflow: hidden;
+  position: relative;
+
+  &.active {
+    background-color: #0C0C0C;
+  }
+
+  &.passive {
+    background-color: #0C0C0C;
+  }
+
+  .square {
+    height: 80px;
+    width: 400px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    transform: scale(1);
+    transform-origin: center;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0;
+      background-color: white;
+      animation: slide 0.5s forwards;
+      animation-delay: 1s;
+    }
+  }
+
+  span {
+    position: absolute;
+    color: white;
+    bottom: 50px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+}
+
+#startScene.active .square {
+  opacity: 1;
+}
+
+.square.expand {
+  animation: expandSquare 0.5s forwards;
+}
+
+@keyframes slide {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes expandSquare {
+  from {
+    height: 80px;
+    width: 400px;
+  }
+  to {
+    height: 100vh;
+    width: 100vw;
+  }
+}
+
+.fade-out {
+  opacity: 0;
+}

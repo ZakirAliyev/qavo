@@ -1,0 +1,22 @@
+#heroBottom {
+  color: white;
+  position: relative;
+
+  .title {
+    position: absolute;
+    left: 80px;
+    bottom: 50px;
+    right: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  @media screen and (max-width: 992px) {
+    .title {
+      left: 32px;
+      right: 32px;
+      bottom: 32px;
+    }
+  }
+}
