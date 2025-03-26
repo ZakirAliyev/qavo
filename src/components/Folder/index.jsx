@@ -9,14 +9,20 @@ import image5 from '/src/assets/folder5.jpg';
 function Folder() {
     const images = [image1, image2, image3, image4, image5];
     const words = ["WEB DESIGN", "MOBILE APP DEVELOPMENT", "UI/UX DESIGN", "SEO OPTIMIZATION", "DATA ANALYTICS"];
+
+    // Scroll ile ilgili state'ler
     const [scrollIndex, setScrollIndex] = useState(0);
     const [scrollDirection, setScrollDirection] = useState('down');
     const lastScrollY = useRef(0);
 
+    // Özel imleçle ilgili state'ler
+    const [cursorPos, setCursorPos] = useState({x: 0, y: 0});
+    const [cursorHover, setCursorHover] = useState(false);
+
+    // Sayfa kaydırma hareketini dinle
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-            // Scroll yönünü belirleme
             if (currentScrollY > lastScrollY.current) {
                 setScrollDirection('down');
             } else if (currentScrollY < lastScrollY.current) {
@@ -30,6 +36,14 @@ function Folder() {
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const moveCursor = (e) => {
+            setCursorPos({x: e.clientX, y: e.clientY});
+        };
+        window.addEventListener("mousemove", moveCursor);
+        return () => window.removeEventListener("mousemove", moveCursor);
     }, []);
 
     const frontIndex = Math.floor(scrollIndex);
@@ -67,20 +81,30 @@ function Folder() {
                             filter: `blur(${blur}px)`,
                             transition: transitionStyle,
                         }}
+                        onMouseEnter={() => setCursorHover(true)}
+                        onMouseLeave={() => setCursorHover(false)}
+                        onClick={() => console.log(`Tıklanan resim: ${words[i]} (Index: ${i})`)}
                     >
-                        <img src={img} alt={`Image ${i + 1}`}/>
+                        <img src={img} alt={`Image ${i + 1}`} />
                         <div className="overlay">
-                            <div className={"type"}>2024</div>
-                            <div className={"word"}>{words[i]}</div>
-                            <div className={"type"}>Photo</div>
+                            <div className="type">2024</div>
+                            <div className="word">{words[i]}</div>
+                            <div className="type">Photo</div>
                         </div>
                         <div className="overlay1">
-                            <div className={"type"}>2024</div>
-                            <div className={"type"}>Photo</div>
+                            <div className="type">2024</div>
+                            <div className="type">Photo</div>
                         </div>
                     </div>
                 );
             })}
+
+            <div
+                className={`custom-cursor ${cursorHover ? 'hovered' : ''}`}
+                style={{left: cursorPos.x, top: cursorPos.y}}
+            >
+                {cursorHover && '[ OPEN ]'}
+            </div>
         </section>
     );
 }

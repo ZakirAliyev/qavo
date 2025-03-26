@@ -10,6 +10,22 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .titleWrapper {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      justify-content: center;
+
+      .icon {
+        transition: all .2s ease;
+        font-size: 25px;
+
+        &:hover {
+          rotate: -90deg;
+        }
+      }
+    }
   }
 
   @media screen and (max-width: 992px) {

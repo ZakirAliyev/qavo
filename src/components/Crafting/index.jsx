@@ -1,11 +1,15 @@
 import "./index.scss";
 import {useEffect, useRef, useState} from "react";
 import Title from "../Title/index.jsx";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function Crafting() {
     const descriptionRef = useRef(null);
     const [animate, setAnimate] = useState(false);
-
+    AOS.init({
+        duration: 1000
+    });
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -29,9 +33,9 @@ function Crafting() {
 
     return (
         <section id="crafting">
-            <div ref={descriptionRef} className={`description ${animate ? 'animate' : ''}`}>
-                <div>CRAFTING WEBSITES WHERE THE ELEGANCE</div>
-                <div>OF DESIGN INTERSECTS WITH THE SCIENCE SELLING PRODUCTS.</div>
+            <div className={`description`}>
+                <div data-aos={"fade-left"}>CRAFTING WEBSITES WHERE THE ELEGANCE</div>
+                <div data-aos={"fade-right"}>OF DESIGN INTERSECTS WITH THE SCIENCE SELLING PRODUCTS.</div>
             </div>
             <button>
                 <div className={"title"}>

@@ -3,6 +3,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 0 16px;
+  overflow-x:hidden !important;
 
   .description {
     font-size: 17px;
@@ -13,13 +15,6 @@
     padding: 8px;
     transform: translateY(0);
     opacity: 1;
-  }
-
-  .description.animate {
-    transform: translateY(50px);
-    opacity: 0;
-    animation: waveAnimation 0.8s ease-out forwards;
-    animation-delay: 0.4s;
   }
 
   button {

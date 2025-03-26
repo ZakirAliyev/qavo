@@ -1,11 +1,17 @@
-import './index.scss'
-import { useEffect, useRef } from "react";
+import './index.scss';
+import {useEffect, useRef, useState} from "react";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function OurTeamTitle() {
     const letters = "OUR TEAM".split("");
     const nameContainerRef = useRef(null);
     const spanRefs = useRef([]);
     spanRefs.current = [];
+
+    AOS.init({
+        duration: 1000
+    });
 
     const addToRefs = (el) => {
         if (el && !spanRefs.current.includes(el)) {
@@ -21,28 +27,31 @@ function OurTeamTitle() {
         return clamped * clamped * (3 - 2 * clamped);
     };
 
-    // Use IntersectionObserver to trigger the animation on first appearance.
+    // Custom cursor state’leri
+    const [cursorPos, setCursorPos] = useState({x: 0, y: 0});
+    const [cursorHover, setCursorHover] = useState(false);
+
+    // Letter animasyonu için IntersectionObserver
     useEffect(() => {
         const container = nameContainerRef.current;
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
-                        // Add the "wave-letter" class to each span when the container comes into view
                         spanRefs.current.forEach((span, index) => {
                             span.classList.add("wave-letter");
                             span.style.animationDelay = `${index * 0.1}s`;
                         });
-                        observer.unobserve(container);
                     }
                 });
             },
-            { threshold: 0.1 }
+            {threshold: 0.1}
         );
         observer.observe(container);
         return () => observer.disconnect();
     }, []);
 
+    // Fare hareketine bağlı harf efekti
     useEffect(() => {
         const container = nameContainerRef.current;
 
@@ -77,24 +86,45 @@ function OurTeamTitle() {
         };
     }, []);
 
+    // Custom cursor için: fare pozisyonunu takip et
+    useEffect(() => {
+        const container = nameContainerRef.current;
+
+        const handleCursorMove = (e) => {
+            setCursorPos({x: e.clientX, y: e.clientY});
+        };
+
+        container.addEventListener("mousemove", handleCursorMove);
+        return () => container.removeEventListener("mousemove", handleCursorMove);
+    }, []);
+
     return (
         <section id="ourTeamTitle">
-            <div className="description">
-                WE ARE A CREATIVE STUDIO, SPECIALIZED IN STRATEGY, BRANDING <br/>
-                DESIGN, AND DEVELOPMENT. OUR WORK IS ALWAYS AT THE INTERSECTION <br/>
-                OF DESIGN AND TECHNOLOGY.
+            <div className="description" data-aos={"fade-up"}>
+                EXPLORING OUR WORLD OF VISUAL AND INTERACTIVE DESIGN
             </div>
-            <div className="name" ref={nameContainerRef}>
+            <div
+                className="name"
+                ref={nameContainerRef}
+                onMouseEnter={() => setCursorHover(true)}
+                onMouseLeave={() => setCursorHover(false)}
+            >
                 {letters.map((letter, index) => (
                     <span
                         key={index}
                         ref={addToRefs}
-                        // The "wave-letter" class will be added when the container is in view.
                         onAnimationEnd={(e) => e.target.classList.remove("wave-letter")}
                     >
-            {letter}
-          </span>
+                        {letter === " " ? "\u00A0" : letter}
+                    </span>
                 ))}
+            </div>
+            {/* Custom cursor elementi */}
+            <div
+                className={`custom-cursor ${cursorHover ? 'hovered' : ''}`}
+                style={{left: cursorPos.x, top: cursorPos.y}}
+            >
+                {cursorHover && '[ ABOUT US ]'}
             </div>
         </section>
     );

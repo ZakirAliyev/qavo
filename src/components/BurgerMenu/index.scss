@@ -1,0 +1,103 @@
+#burgerMenu {
+  width: 100vw;
+  height: 100vh;
+  background-color: #0C0C0C;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 995;
+  animation: slideDown 0.5s ease-out forwards;
+
+  &.closing {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  .wave-text {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translateY(-50%);
+    color: white;
+
+    p {
+      margin: 5px 0;
+      opacity: 0;
+      animation: wave 0.8s ease-out forwards;
+      font-family: "Six Caps", sans-serif;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 550;
+      letter-spacing: 2px;
+    }
+
+    p:nth-child(1) {
+      animation-delay: 0.2s;
+    }
+
+    p:nth-child(2) {
+      animation-delay: 0.4s;
+    }
+
+    p:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    p:nth-child(4) {
+      animation-delay: 0.8s;
+    }
+
+    p:nth-child(5) {
+      animation-delay: 1.0s;
+    }
+
+    p:nth-child(6) {
+      animation-delay: 1.2s;
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes wave {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes waveExit {
+    from {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+  }
+
+}

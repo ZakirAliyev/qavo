@@ -1,21 +1,23 @@
 #title {
   width: max-content;
   overflow: hidden;
-  height: 20px;
+  // Container yüksekliği ve font boyutu için dinamik değer (varsayılan 14px)
+  height: var(--size, 14px);
   color: white;
-  font-size: 14px;
+  font-size: var(--size, 14px);
 
   .inner {
     transition: transform 0.3s ease;
   }
 
+  // Hover durumunda, translateY değeri de dinamik hesaplanıyor
   &:hover .inner {
-    transform: translateY(-20px);
+    transform: translateY(calc(-1 * var(--size, 14px)));
   }
 
   .inner div {
-    height: 20px;
-    line-height: 20px;
+    height: var(--size, 14px);
+    line-height: var(--size, 14px);
     text-align: center;
     animation: wave 1.5s ease-out forwards;
   }
@@ -23,12 +25,11 @@
   @keyframes wave {
     0% {
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(calc(-1 * var(--size, 14px)));
     }
     100% {
       opacity: 1;
       transform: translateY(0);
     }
   }
-
 }
