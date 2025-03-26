@@ -1,4 +1,4 @@
-#hero {
+#ourTeamTitle {
   color: white;
   display: flex;
   align-items: center;
@@ -7,13 +7,13 @@
   height: 100vh;
 
   .name {
-    font-size: 350px;
+    font-size: 400px;
     cursor: pointer;
 
     span {
       display: inline-block;
       transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      transform-origin: bottom center;
+      transform-origin: top center;
       font-family: "Six Caps", sans-serif;
     }
   }
@@ -61,7 +61,7 @@
 
   @media screen and (max-width: 992px) {
     .name {
-      font-size: 300px;
+      font-size: 200px;
     }
     .description {
       font-size: 16px;
@@ -70,7 +70,7 @@
 
   @media screen and (max-width: 400px) {
     .name {
-      font-size: 250px;
+      font-size: 150px;
     }
     .description {
       font-size: 14px;

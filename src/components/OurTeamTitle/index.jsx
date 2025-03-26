@@ -1,8 +1,8 @@
-import "./index.scss";
-import {useRef, useEffect} from "react";
+import './index.scss'
+import { useEffect, useRef } from "react";
 
-function Hero() {
-    const letters = "QAVO".split("");
+function OurTeamTitle() {
+    const letters = "OUR TEAM".split("");
     const nameContainerRef = useRef(null);
     const spanRefs = useRef([]);
     spanRefs.current = [];
@@ -13,7 +13,7 @@ function Hero() {
         }
     };
 
-    const maxDelta = 0.3;
+    const maxDelta = 0.175;
     const effectRange = 150;
 
     const smoothstep = (t) => {
@@ -21,12 +21,33 @@ function Hero() {
         return clamped * clamped * (3 - 2 * clamped);
     };
 
+    // Use IntersectionObserver to trigger the animation on first appearance.
+    useEffect(() => {
+        const container = nameContainerRef.current;
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        // Add the "wave-letter" class to each span when the container comes into view
+                        spanRefs.current.forEach((span, index) => {
+                            span.classList.add("wave-letter");
+                            span.style.animationDelay = `${index * 0.1}s`;
+                        });
+                        observer.unobserve(container);
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+        observer.observe(container);
+        return () => observer.disconnect();
+    }, []);
+
     useEffect(() => {
         const container = nameContainerRef.current;
 
         const handleMouseMove = (e) => {
             const mouseX = e.clientX;
-
             spanRefs.current.forEach((span) => {
                 const rect = span.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
@@ -57,27 +78,26 @@ function Hero() {
     }, []);
 
     return (
-        <section id="hero">
+        <section id="ourTeamTitle">
+            <div className="description">
+                WE ARE A CREATIVE STUDIO, SPECIALIZED IN STRATEGY, BRANDING <br/>
+                DESIGN, AND DEVELOPMENT. OUR WORK IS ALWAYS AT THE INTERSECTION <br/>
+                OF DESIGN AND TECHNOLOGY.
+            </div>
             <div className="name" ref={nameContainerRef}>
                 {letters.map((letter, index) => (
                     <span
                         key={index}
                         ref={addToRefs}
-                        style={{animationDelay: `${index * 0.1}s`}}
-                        className="wave-letter"
+                        // The "wave-letter" class will be added when the container is in view.
                         onAnimationEnd={(e) => e.target.classList.remove("wave-letter")}
                     >
             {letter}
           </span>
                 ))}
             </div>
-            <div className="description">
-                WE ARE A CREATIVE STUDIO, SPECIALIZED IN STRATEGY, BRANDING <br/>
-                DESIGN, AND DEVELOPMENT. OUR WORK IS ALWAYS AT THE INTERSECTION <br/>
-                OF DESIGN AND TECHNOLOGY.
-            </div>
         </section>
     );
 }
 
-export default Hero;
+export default OurTeamTitle;

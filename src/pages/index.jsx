@@ -1,6 +1,7 @@
 import {Outlet} from "react-router-dom";
 import {useEffect, useState} from "react";
 import AnimatedCursor from "react-animated-cursor";
+import video1 from "/src/assets/bgVideo.webm"
 
 function MainPage() {
 
