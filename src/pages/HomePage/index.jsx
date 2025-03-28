@@ -1,20 +1,24 @@
-import { useState, useEffect } from 'react';
-import Navbar from "../../components/Navbar/index.jsx";
-import Hero from "../../components/Hero/index.jsx";
-import HeroBottom from "../../components/HeroBottom/index.jsx";
-import Folder from "../../components/Folder/index.jsx";
-import StartScene from "../../components/StartScene/index.jsx";
-import Crafting from "../../components/Crafting/index.jsx";
-import Skills from "../../components/Skills/index.jsx";
-import Information from "../../components/Information/index.jsx";
-import OurTeamTitle from "../../components/OurTeamTitle/index.jsx";
-import Footer from "../../components/Footer/index.jsx";
-import BurgerMenu from "../../components/BurgerMenu/index.jsx";
+import {useState, useEffect} from 'react';
+import Navbar from "../../components/CommonComponents/Navbar/index.jsx";
+import Hero from "../../components/HomeComponents/Hero/index.jsx";
+import HeroBottom from "../../components/HomeComponents/HeroBottom/index.jsx";
+import Folder from "../../components/HomeComponents/Folder/index.jsx";
+import StartScene from "../../components/HomeComponents/StartScene/index.jsx";
+import Crafting from "../../components/HomeComponents/Crafting/index.jsx";
+import Skills from "../../components/HomeComponents/Skills/index.jsx";
+import Information from "../../components/CommonComponents/Information/index.jsx";
+import OurTeamTitle from "../../components/CommonComponents/OurTeamTitle/index.jsx";
+import Footer from "../../components/CommonComponents/Footer/index.jsx";
+import BurgerMenu from "../../components/CommonComponents/BurgerMenu/index.jsx";
 
 function HomePage() {
     const [display, setDisplay] = useState(true);
     const [isBurgerOpen, setIsBurgerOpen] = useState(false);
     const [isBurgerClosing, setIsBurgerClosing] = useState(false);
+
+    // const {data: getAllProject} = useGetAllProjectQuery()
+    // const pro = getAllProject?.data
+    // console.log(pro)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -23,7 +27,6 @@ function HomePage() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Disable scroll when burger menu open or closing
     useEffect(() => {
         if (isBurgerOpen || isBurgerClosing) {
             document.body.style.overflow = 'hidden';
@@ -50,21 +53,21 @@ function HomePage() {
     return (
         <section id="homePage">
             {display ? (
-                <StartScene />
+                <StartScene/>
             ) : (
                 <>
                     <Navbar
                         onToggleBurger={handleBurgerToggle}
                         isBurgerOpen={isBurgerOpen}
                     />
-                    <Hero />
-                    <HeroBottom />
-                    <Folder />
-                    <Crafting />
-                    <Skills />
-                    <Information />
-                    <OurTeamTitle />
-                    <Footer />
+                    <Hero/>
+                    <HeroBottom/>
+                    <Folder/>
+                    <Crafting/>
+                    <Skills/>
+                    <Information/>
+                    <OurTeamTitle/>
+                    <Footer/>
                     {isBurgerOpen && (
                         <BurgerMenu
                             isClosing={isBurgerClosing}

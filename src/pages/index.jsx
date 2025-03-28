@@ -1,6 +1,7 @@
 import {Outlet} from "react-router-dom";
 import {useEffect, useState} from "react";
 import AnimatedCursor from "react-animated-cursor";
+import ScrollToTop from "../components/CommonComponents/ScrollToTop/index.jsx";
 
 function MainPage() {
 
@@ -34,6 +35,7 @@ function MainPage() {
 
     return (
         <>
+            <ScrollToTop/>
             {!isMobile && (
                 <AnimatedCursor
                     innerSize={8}

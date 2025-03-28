@@ -1,18 +1,26 @@
+// import Cookies from "js-cookie";
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
-import Cookies from "js-cookie";
 
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: '',
-        prepareHeaders: (headers) => {
-            const token = Cookies.get('');
-            if (token) {
-                headers.set('Authorization', `Bearer ${token}`);
-            }
-            return headers;
-        },
+        baseUrl: 'https://qavocodes-001-site1.qtempurl.com/api/',
+        // prepareHeaders: (headers) => {
+        //     const token = Cookies.get('');
+        //     if (token) {
+        //         headers.set('Authorization', `Bearer ${token}`);
+        //     }
+        //     return headers;
+        // },
     }),
-    endpoints: (builder) => ({}),
+    endpoints: (builder) => ({
+        getAllProject: builder.query({
+            query: () => ({
+                url: `/Project/get-all-projects`,
+            }),
+        }),
+    }),
 })
-export const {} = userApi
+export const {
+    useGetAllProjectQuery
+} = userApi

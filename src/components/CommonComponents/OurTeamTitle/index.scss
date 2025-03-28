@@ -102,6 +102,9 @@
   }
 
   @media screen and (max-width: 992px) {
+    .custom-cursor {
+      display: none;
+    }
     .name {
       font-size: 200px;
     }
@@ -111,6 +114,10 @@
   }
 
   @media screen and (max-width: 400px) {
+
+    .custom-cursor {
+      display: none;
+    }
     .name {
       font-size: 150px;
     }

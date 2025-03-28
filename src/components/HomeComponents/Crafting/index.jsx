@@ -1,6 +1,6 @@
 import "./index.scss";
 import {useEffect, useRef, useState} from "react";
-import Title from "../Title/index.jsx";
+import Title from "../../CommonComponents/Title/index.jsx";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
