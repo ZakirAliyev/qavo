@@ -35,7 +35,7 @@ function Footer() {
                 </div>
             </section>
             <section id="footerBottom">
-                <div>2025 © QavoCodes. All rights reserved.</div>
+                <div>2025 © QavoCodes. Bütün hüquqlar qorunur.</div>
             </section>
         </>
     );
