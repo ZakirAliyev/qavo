@@ -26,6 +26,9 @@
     transition: opacity 0.5s ease;
     transform: scale(1);
     transform-origin: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &::after {
       content: "";

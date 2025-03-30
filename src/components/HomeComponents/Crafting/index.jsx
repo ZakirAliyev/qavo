@@ -34,12 +34,12 @@ function Crafting() {
     return (
         <section id="crafting">
             <div className={`description`}>
-                <div data-aos={"fade-left"}>CRAFTING WEBSITES WHERE THE ELEGANCE</div>
-                <div data-aos={"fade-right"}>OF DESIGN INTERSECTS WITH THE SCIENCE SELLING PRODUCTS.</div>
+                <div data-aos={"fade-left"}>DİZAYN SADƏCƏ GÖRÜNÜŞ DEYİL</div>
+                <div data-aos={"fade-right"}>O, RUHUN ZÖVQLƏ DANIŞDIĞI DİLDİR.</div>
             </div>
             <button>
                 <div className={"title"}>
-                    <Title title={"See All Works"}/>
+                    <Title title={"Bütün İşləri Gör"}/>
                 </div>
             </button>
         </section>

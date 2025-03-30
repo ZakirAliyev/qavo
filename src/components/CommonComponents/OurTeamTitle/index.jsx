@@ -4,7 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function OurTeamTitle() {
-    const letters = "OUR TEAM".split("");
+    const letters = "BİZİM KOMANDA".split("");
     const nameContainerRef = useRef(null);
     const spanRefs = useRef([]);
     spanRefs.current = [];
@@ -101,7 +101,7 @@ function OurTeamTitle() {
     return (
         <section id="ourTeamTitle">
             <div className="description" data-aos={"fade-up"}>
-                EXPLORING OUR WORLD OF VISUAL AND INTERACTIVE DESIGN
+                VİZUAL VƏ İNTERAKTİV DİZAYN DÜNYASIMIZI KƏŞF EDİRİK
             </div>
             <div
                 className="name"
@@ -124,7 +124,7 @@ function OurTeamTitle() {
                 className={`custom-cursor ${cursorHover ? 'hovered' : ''}`}
                 style={{left: cursorPos.x, top: cursorPos.y}}
             >
-                {cursorHover && '[ ABOUT US ]'}
+                {cursorHover && '[ HAQQIMIZDA ]'}
             </div>
         </section>
     );

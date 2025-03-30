@@ -1,8 +1,11 @@
 import "./index.scss";
-import { useRef, useEffect, useState } from "react";
+import {useRef, useEffect, useState} from "react";
+import {useParams} from "react-router";
+import {useGetProjectByIdQuery} from "../../../services/userApi.jsx";
 
-function HeroPortfolioDetails() {
-    const letters = "KANDAR".split("");
+function HeroPortfolioDetails({project}) {
+
+    const letters = project?.title.toUpperCase().split("");
     const nameContainerRef = useRef(null);
     const spanRefs = useRef([]);
     spanRefs.current = [];
@@ -67,39 +70,14 @@ function HeroPortfolioDetails() {
         return () => clearTimeout(timer);
     }, []);
 
-    // Scroll ile konum ve ölçek animasyonu: scale transform'u ile font boyutu küçülüyor
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollY = window.scrollY;
-            // Scroll etkisinin tamamlanacağı mesafe (threshold) – isteğe göre ayarlayabilirsiniz
-            const threshold = window.innerHeight * 1.25;
-            const progress = Math.min(scrollY / threshold, 1);
-
-            // Örneğin; metni biraz sola ve aşağı kaydırıyoruz
-            const translateX = -35 * progress; // vw cinsinden
-            const translateY = 50 * progress;  // vh cinsinden
-
-            // Ölçek: progress 0 iken scale 1, progress 1 iken scale 0.5 olacak şekilde
-            const scaleFactor = 1 - 0.5 * progress;
-
-            if (nameContainerRef.current) {
-                // Hem translate hem de scale aynı anda uygulanıyor.
-                nameContainerRef.current.style.transform = `translate(${translateX}vw, ${translateY}vh) scale(${scaleFactor})`;
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
     return (
         <section id="heroPortfolioDetails">
             <div className="name" ref={nameContainerRef}>
-                {letters.map((letter, index) => (
+                {letters && letters.map((letter, index) => (
                     <span
                         key={index}
                         ref={addToRefs}
-                        style={{ animationDelay: `${index * 0.1}s` }}
+                        style={{animationDelay: `${index * 0.1}s`}}
                         className="wave-letter"
                         onAnimationEnd={(e) => e.target.classList.remove("wave-letter")}
                     >
@@ -107,6 +85,7 @@ function HeroPortfolioDetails() {
           </span>
                 ))}
             </div>
+            <div className="description">{project?.subTitle}</div>
             {isAnimating && <div className="transition-overlay1"></div>}
         </section>
     );

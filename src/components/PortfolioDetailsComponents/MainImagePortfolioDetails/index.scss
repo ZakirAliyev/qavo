@@ -1,0 +1,42 @@
+#mainImagePortfolioDetails {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  .imageWrapper {
+    position: relative;
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    height: 100vh;
+    display: block;
+  }
+
+  // Resmin alt kısmında sabit kalan fade efekti
+  .bottomFade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 300px; // İstediğiniz yüksekliği belirleyebilirsiniz
+    pointer-events: none;
+    background: linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0) 0%,
+                    #0C0C0C
+    );
+  }
+
+  .overlay,
+  .imgOverlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transition: background 0.5s ease-in-out;
+  }
+}

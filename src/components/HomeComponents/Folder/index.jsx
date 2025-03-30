@@ -94,11 +94,11 @@ function Folder() {
                         <div className="overlay">
                             <div className="type">2024</div>
                             <div className="word">{words[i]}</div>
-                            <div className="type">Photo</div>
+                            <div className="type">Bölmə</div>
                         </div>
                         <div className="overlay1">
                             <div className="type">2024</div>
-                            <div className="type">Photo</div>
+                            <div className="type">Bölmə</div>
                         </div>
                     </div>
                 );
@@ -108,7 +108,7 @@ function Folder() {
                 className={`custom-cursor ${cursorHover ? 'hovered' : ''}`}
                 style={{left: cursorPos.x, top: cursorPos.y}}
             >
-                {cursorHover && '[ OPEN ]'}
+                {cursorHover && '[ AÇIN ]'}
             </div>
         </section>
     );

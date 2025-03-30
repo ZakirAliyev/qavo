@@ -72,9 +72,9 @@ function Hero() {
                 ))}
             </div>
             <div className="description">
-                WE ARE A CREATIVE STUDIO, SPECIALIZED IN STRATEGY, BRANDING <br/>
-                DESIGN, AND DEVELOPMENT. OUR WORK IS ALWAYS AT THE INTERSECTION <br/>
-                OF DESIGN AND TECHNOLOGY.
+                BİZ STRATEGİYA, BRENDİNQ ÜZRƏ İXTİSAS EDİLMİŞ YARADICI STUDIYOYUQ <br/>
+                DİZAYN, VƏ İNKİŞAF. İŞİMİZ HƏMİŞƏ MÜKƏMMƏLDİR <br/>
+                DİZAYN VƏ TEXNOLOGİYA.
             </div>
         </section>
     );

@@ -1,0 +1,66 @@
+#accordionMenu {
+  background-color: white;
+  margin: 100px 0;
+  padding: 50px 0;
+
+  .row {
+  min-height: 100vh;
+  }
+
+  .box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    .ourservices {
+      font-size: 150px;
+      font-family: "Six Caps", sans-serif;
+    }
+  }
+
+  // Accordion içindeki başlık ve içerik metinlerinin rengini kırmızı yapıyoruz.
+  .rs-accordion-panel-header,
+  .rs-accordion-header,
+  .rs-accordion-header-title,
+  .rs-accordion-panel-body {
+    color: red !important;
+  }
+
+  .rs-panel-title {
+    font-weight: 500;
+    font-size: 18px;
+  }
+
+  // Accordion paneli açılıp kapanırken animasyon eklemek için
+  .rs-accordion-panel-body {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+  }
+
+  // Aktif panelde içeriğin görünür olması
+  .rs-accordion-panel.rs-accordion-panel-active .rs-accordion-panel-body {
+    max-height: 500px; // İçeriğe göre ayarlayın
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 992px) {
+    .box {
+      margin-bottom: 50px;
+      .ourservices {
+        font-size: 125px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .box {
+      margin-bottom: 50px;
+      .ourservices {
+        font-size: 100px;
+      }
+    }
+  }
+}

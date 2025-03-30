@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import './index.scss';
+import {Triangle} from "react-loader-spinner";
 
 function StartScene() {
     const [active, setActive] = useState(false);
@@ -29,10 +30,25 @@ function StartScene() {
 
     return (
         <section id="startScene" className={active ? 'active' : 'passive'}>
-            <div className={`square ${expand ? 'expand' : ''}`}></div>
+            <div className={`square ${expand ? 'expand' : ''}`}>
+                <div style={{
+                    position: 'absolute',
+                    zIndex: 100,
+                }}>
+                    <Triangle
+                        visible={true}
+                        height="80"
+                        width="80"
+                        color="#0c0c0c"
+                        ariaLabel="triangle-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                    />
+                </div>
+            </div>
             {!hideMessage && (
                 <span className={expand ? 'fade-out' : ''}>
-                    Please wait, content is loading
+                    Zəhmət olmasa gözləyin, websayt yüklənir
                 </span>
             )}
         </section>

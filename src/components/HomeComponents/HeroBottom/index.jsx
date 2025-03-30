@@ -12,10 +12,10 @@ function HeroBottom() {
         <section id="heroBottom">
             <div className="title">
                 <div className="titleWrapper">
-                    <Title title="Scroll to Explore" />
+                    <Title title="Sürüştür Və Kəşf Et" />
                     <HiMiniChevronDown className="icon" onClick={handleScroll} />
                 </div>
-                <Title title="Featured Projects" />
+                <Title title="Seçilmiş layihələr" />
             </div>
         </section>
     );

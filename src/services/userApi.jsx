@@ -19,8 +19,14 @@ export const userApi = createApi({
                 url: `/Project/get-all-projects`,
             }),
         }),
+        getProjectById: builder.query({
+            query: (id) => ({
+                url: `/Project/get-project-by-id/${id}`,
+            }),
+        }),
     }),
 })
 export const {
-    useGetAllProjectQuery
+    useGetAllProjectQuery,
+    useGetProjectByIdQuery,
 } = userApi

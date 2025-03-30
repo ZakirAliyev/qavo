@@ -8,6 +8,7 @@ import HeroBottomPortfolio from "../../components/PortfolioComponents/HeroBottom
 import FolderPortfolio from "../../components/PortfolioComponents/FolderPortfolio/index.jsx";
 import Information from "../../components/CommonComponents/Information/index.jsx";
 import OurTeamTitle from "../../components/CommonComponents/OurTeamTitle/index.jsx";
+import AccordionMenu from "../../components/CommonComponents/AccordionMenu/index.jsx";
 
 function PortfolioPage() {
     const [, setDisplay] = useState(true);
@@ -55,6 +56,7 @@ function PortfolioPage() {
             <HeroPortfolio portfolioName={portfolioName}/>
             <HeroBottomPortfolio/>
             <FolderPortfolio portfolioName={portfolioName}/>
+            <AccordionMenu/>
             <Information/>
             <OurTeamTitle/>
             <Footer/>

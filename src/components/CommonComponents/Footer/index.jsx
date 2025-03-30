@@ -16,13 +16,13 @@ function Footer() {
                 <div className="back" onClick={handleBack}>
                     <HiMiniChevronUp className="icon"/>
                     <div className="title">
-                        <Title title="Back Top"/>
+                        <Title title="Başa Qayıt"/>
                     </div>
                 </div>
-                <div className={"copy"}>2025 © QavoCodes. All rights reserved.</div>
+                <div className={"copy"}>2025 © QavoCodes. Bütün hüquqlar qorunur.</div>
                 <div className="back follow">
                     <div className="title">
-                        <Title title="Follow Us"/>
+                        <Title title="Bizi İzləyin"/>
                     </div>
                     <IoShareSocialOutline className={"icon1"}/>
                     <div className="social-links">
