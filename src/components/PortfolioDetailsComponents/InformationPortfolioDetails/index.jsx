@@ -7,7 +7,7 @@ import {useNavigate} from "react-router";
 
 function InformationPortfolioDetails({project}) {
 
-    const letters = "DETAILS".toUpperCase().split("");
+    const letters = "DETALLAR".toUpperCase().split("");
     const nameContainerRef = useRef(null);
     const spanRefs = useRef([]);
     spanRefs.current = [];
