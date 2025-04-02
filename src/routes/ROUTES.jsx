@@ -38,6 +38,10 @@ export const ROUTES = [
             {
                 path: 'cp/dashboard/portfolio',
                 element: <AdminPage/>,
+            },
+            {
+                path: 'cp/dashboard/agency-portfolio',
+                element: <AdminPage/>,
             }
         ]
     }
