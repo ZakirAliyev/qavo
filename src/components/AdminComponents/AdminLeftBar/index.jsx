@@ -24,6 +24,20 @@ function AdminLeftBar() {
                         <FaBorderAll/>
                         <span>Qavo Codes</span>
                     </div>
+                    <div
+                        className={`route ${isOrdersSelected ? 'selected' : ''}`}
+                        onClick={() => navigate('/cp/dashboard/agency-portfolio')}
+                    >
+                        <FaBorderAll/>
+                        <span>Qavo Agency</span>
+                    </div>
+                    <div
+                        className={`route ${isOrdersSelected ? 'selected' : ''}`}
+                        onClick={() => navigate('/cp/dashboard/agency-portfolio')}
+                    >
+                        <FaBorderAll/>
+                        <span>Qavo Academy</span>
+                    </div>
                 </div>
             </div>
         </section>

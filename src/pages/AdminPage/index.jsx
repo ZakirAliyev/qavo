@@ -54,7 +54,7 @@ function AdminPage() {
                 {location.pathname === "/cp/dashboard/portfolio" ? (
                     // <Products/>
                     <AdminPortfolio/>
-                ) : location.pathname === "/cp/dashboard/services" ? (
+                ) : location.pathname === "/cp/dashboard/agency-portfolio" ? (
                     // <Services/>
                     <></>
                 ) : location.pathname === "/cp/dashboard/brands" ? (
