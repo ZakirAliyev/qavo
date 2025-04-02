@@ -2,7 +2,7 @@ import "./index.scss";
 import {useEffect, useState, useRef} from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import {PORTFOLIO_IMAGE_URL} from "../../../constants.js";
+import {PORTFOLIO_VIDEO_URL} from "../../../constants.js";
 
 function VideosPortfolioDetails({project}) {
     const [isAnimating, setIsAnimating] = useState(false);
@@ -74,7 +74,7 @@ function VideosPortfolioDetails({project}) {
                                 controls
                                 muted
                                 preload="none"
-                                data-src={`${PORTFOLIO_IMAGE_URL}${video}`}
+                                data-src={`${PORTFOLIO_VIDEO_URL}${video}`}
                                 ref={(el) => (videoRefs.current[index] = el)}
                             >
                                 Tarayıcınız video etiketini desteklemiyor.

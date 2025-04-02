@@ -1,0 +1,50 @@
+#teamMembers {
+  background-color: #0C0C0C;
+  color: white;
+
+  img {
+    width: 300px;
+    border-radius: 10px;
+    aspect-ratio: 4/5;
+    filter: grayscale(1) blur(2px);
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+    background-color: black;
+  }
+
+  .wrapper {
+    padding: 0 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .name {
+      font-size: 160px;
+      font-family: "Six Caps", sans-serif;
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(90deg, white 50%, #252525 50%);
+      background-size: 200%;
+      background-position: left;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background-position 0.2s ease;
+    }
+
+    .name.gray {
+      background-position: right;
+    }
+
+    .type {
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  .line {
+    width: 100%;
+    height: 1px;
+    background-color: #303030;
+  }
+}

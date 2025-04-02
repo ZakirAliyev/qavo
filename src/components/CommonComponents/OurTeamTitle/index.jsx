@@ -2,6 +2,7 @@ import './index.scss';
 import {useEffect, useRef, useState} from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import {useNavigate} from "react-router";
 
 function OurTeamTitle() {
     const letters = "BİZİM KOMANDA".split("");
@@ -98,6 +99,8 @@ function OurTeamTitle() {
         return () => container.removeEventListener("mousemove", handleCursorMove);
     }, []);
 
+    const navigate = useNavigate()
+
     return (
         <section id="ourTeamTitle">
             <div className="description" data-aos={"fade-up"}>
@@ -108,6 +111,7 @@ function OurTeamTitle() {
                 ref={nameContainerRef}
                 onMouseEnter={() => setCursorHover(true)}
                 onMouseLeave={() => setCursorHover(false)}
+                onClick={() => navigate('/our-team')}
             >
                 {letters.map((letter, index) => (
                     <span

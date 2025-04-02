@@ -43,7 +43,7 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
         return () => clearTimeout(timer);
     }, []);
 
-    const titles = ["PORTFOLIO", "HAQQIMIZDA", "HEKAYEMIZ", "MAGAZA", "ELAQE", "DAHA ÇOXU"];
+    const titles = ["PORTFOLIO", "HAQQIMIZDA", "HEKAYEMIZ", "MAGAZA", "закир", "DAHA ÇOXU"];
 
     return (
         <section

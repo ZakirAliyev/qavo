@@ -20,8 +20,8 @@ function AccordionMenu() {
                 <div className="row">
                     <div className="box col-6 col-md-6 col-sm-12 col-xs-12">
                         <div>
-                            <div className="ourservices" data-aos={"fade-right"}>BIZIM</div>
-                            <div className="ourservices" data-aos={"fade-right"}>XIDMETLERIMIZ</div>
+                            <div className="ourservices" data-aos={"fade-right"}>BİZİM</div>
+                            <div className="ourservices" data-aos={"fade-right"}>XİDMETLERİMİZ</div>
                         </div>
                     </div>
                     <div className="box col-6 col-md-6 col-sm-12 col-xs-12" data-aos={"fade-right"}>

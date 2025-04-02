@@ -1,2 +1,5 @@
 export const PORTFOLIO_CARD_IMAGE_URL = 'https://qavocodes-001-site1.qtempurl.com/files/project_card_images/'
 export const PORTFOLIO_IMAGE_URL = 'https://qavocodes-001-site1.qtempurl.com/files/project_images/'
+export const PORTFOLIO_VIDEO_URL = 'https://qavocodes-001-site1.qtempurl.com/files/project_videos/'
+export const PRODUCT_URL = 'https://qavocodes-001-site1.qtempurl.com/files/project_videos/'
+export const OUR_TEAM_IMAGES_URL = 'https://qavocodes-001-site1.qtempurl.com/files/our_team_images/'

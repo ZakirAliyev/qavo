@@ -40,6 +40,10 @@ button, a, .link {
     outline: none;
 }
 
+table, th, td, tr, thead, tbody {
+    text-align: center !important;
+}
+
 .react-spinner {
     width: 100%;
     display: flex;
@@ -274,5 +278,73 @@ button, a, .link {
 
     .col-xs-12 {
         width: calc(100% / 12 * 12);
+    }
+}
+
+.addButton111 {
+    height: 40px;
+    background-color: #0DA5B5;
+    color: white;
+    font-weight: 500;
+    padding: 0 15px;
+    border-radius: 5px;
+    border: 1px solid #0DA5B5;
+    font-size: 16px;
+    margin-bottom: 24px;
+}
+
+:where(.css-dev-only-do-not-override-1a3rktk).ant-menu-dark .ant-menu-item-selected, :where(.css-dev-only-do-not-override-1a3rktk).ant-menu-dark>.ant-menu .ant-menu-item-selected {
+    background: #0C0C0C;
+}
+
+:where(.css-dev-only-do-not-override-1a3rktk).ant-layout [class^="ant-layout"], :where(.css-dev-only-do-not-override-1a3rktk).ant-layout [class*=" ant-layout"] {
+    padding: 0 !important;
+}
+
+.yesnobtn {
+    background-color: #008000;
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+
+    &:hover {
+        background-color: #019e01;
+    }
+}
+
+.yesnobtn1 {
+    background-color: #ff2c2c;
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+
+    &:hover {
+        background-color: #e16363;
+    }
+}
+
+.yesnobtn2 {
+    background-color: #0DA5B5;
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+
+    &:hover {
+        background-color: #e16363;
     }
 }

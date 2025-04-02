@@ -4,7 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function ContactTitle() {
-    const letters = "ƏLAQƏ".split("");
+    const letters = "ELAQE".split("");
     const nameContainerRef = useRef(null);
     const spanRefs = useRef([]);
     spanRefs.current = [];
