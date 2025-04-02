@@ -38,6 +38,11 @@ export const userApi = createApi({
                 url: `/Project/get-all-projects-of-codes`,
             }),
         }),
+        getAllProjectsOfAgency: builder.query({
+            query: () => ({
+                url: `/Project/get-all-projects-of-agency`,
+            }),
+        }),
         postReOrderProject: builder.mutation({
             query: (data) => ({
                 url: `/Project/replace-project`,
@@ -60,4 +65,5 @@ export const {
     useGetAllProjectsOfCodesQuery,
     usePostReOrderProjectMutation,
     useGetAllTeamMembersQuery,
+    useGetAllProjectsOfAgencyQuery,
 } = userApi
