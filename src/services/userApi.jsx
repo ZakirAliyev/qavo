@@ -70,6 +70,12 @@ export const userApi = createApi({
                 body: (data),
             }),
         }),
+        deleteProject: builder.mutation({
+            query: (id) => ({
+                url: `/Project/delete-project/${id}`,
+                method: 'DELETE',
+            }),
+        }),
     }),
 })
 export const {
@@ -81,5 +87,6 @@ export const {
     useGetAllTeamMembersQuery,
     useGetAllProjectsOfAgencyQuery,
     usePostProjectsMutation,
-    usePostUpdateProjectMutation
+    usePostUpdateProjectMutation,
+    useDeleteProjectMutation,
 } = userApi
