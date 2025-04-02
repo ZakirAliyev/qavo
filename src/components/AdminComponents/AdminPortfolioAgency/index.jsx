@@ -1,28 +1,29 @@
 import './index.scss';
-import {Table, Button, message, Modal, Form, Input, Upload} from 'antd';
-import {FiTrash, FiEdit} from "react-icons/fi";
+import { Table, Button, message, Modal, Form, Input, Upload } from 'antd';
+import { FiTrash, FiEdit } from "react-icons/fi";
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import {
     useGetAllProjectsOfAgencyQuery,
-    useGetAllProjectsOfCodesQuery,
+    useGetAllProjectsOfCodesQuery, usePostProjectsMutation,
     usePostReOrderProjectMutation
 } from "../../../services/userApi.jsx";
-import {PORTFOLIO_CARD_IMAGE_URL} from "../../../constants.js";
-import React, {useCallback, useEffect, useState} from "react";
-import {useDrag, useDrop} from 'react-dnd';
+import { PORTFOLIO_CARD_IMAGE_URL } from "../../../constants.js";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDrag, useDrop } from 'react-dnd';
 import update from 'immutability-helper';
 
-const {TextArea} = Input;
+const { TextArea } = Input;
 
 const ItemTypes = {
     ROW: 'row',
 };
 
-const DraggableRow = ({index, moveRow, className, style, ...restProps}) => {
+const DraggableRow = ({ index, moveRow, className, style, ...restProps }) => {
     const ref = React.useRef();
-    const [{isOver, dropClassName}, drop] = useDrop({
+    const [{ isOver, dropClassName }, drop] = useDrop({
         accept: ItemTypes.ROW,
         collect: (monitor) => {
-            const {index: dragIndex} = monitor.getItem() || {};
+            const { index: dragIndex } = monitor.getItem() || {};
             if (dragIndex === index) {
                 return {};
             }
@@ -35,9 +36,9 @@ const DraggableRow = ({index, moveRow, className, style, ...restProps}) => {
             moveRow(item.index, index);
         },
     });
-    const [{isDragging}, drag] = useDrag({
+    const [{ isDragging }, drag] = useDrag({
         type: ItemTypes.ROW,
-        item: {index},
+        item: { index },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
@@ -48,28 +49,38 @@ const DraggableRow = ({index, moveRow, className, style, ...restProps}) => {
         <tr
             ref={ref}
             className={`${className} ${isOver ? dropClassName : ''}`}
-            style={{cursor: 'move', ...style, opacity: isDragging ? 0.5 : 1}}
+            style={{ cursor: 'move', ...style, opacity: isDragging ? 0.5 : 1 }}
             {...restProps}
         />
     );
 };
 
 function AdminPortfolioAgency() {
-    const {data: getAllProjectsOfAgency, refetch, isLoading} = useGetAllProjectsOfAgencyQuery();
+    const { data: getAllProjectsOfAgency, refetch, isLoading } = useGetAllProjectsOfAgencyQuery();
     const [projects, setProjects] = useState([]);
+    // Modal açıq/bağlı vəziyyəti, həm edit, həm də post üçün istifadə olunur
     const [isModalVisible, setIsModalVisible] = useState(false);
+    // Əgər mövcud layihə redaktə edilirsə, bu state dəyəri doldurulur, əks halda null
     const [editingProject, setEditingProject] = useState(null);
     const [form] = Form.useForm();
-    const [postReOrderProject] = usePostReOrderProjectMutation();
+    const [postProjects] = usePostProjectsMutation();
 
-    // Initialize projects data
+    // Upload dəyərini normallaşdıran funksiya
+    const normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    };
+
+    // Layihə məlumatlarını yükləyirik
     useEffect(() => {
         if (getAllProjectsOfAgency?.data) {
             setProjects(getAllProjectsOfAgency.data);
         }
     }, [getAllProjectsOfAgency]);
 
-    // Handle reordering and API call
+    // Sıralamanın yenilənməsi və API çağırışı
     const handleReOrder = useCallback(async (projects) => {
         try {
             const orderInfo = projects.map((project, index) => ({
@@ -121,8 +132,7 @@ function AdminPortfolioAgency() {
 
     const handleDelete = async (id) => {
         try {
-            // Replace with your actual delete API call
-            // await deleteProject(id);
+            // Burada layihə silmə API çağırışınızı əlavə edin
             message.success('Proje başarıyla silindi');
             refetch();
         } catch (error) {
@@ -131,6 +141,7 @@ function AdminPortfolioAgency() {
         }
     };
 
+    // Redaktə modalını açmaq üçün funksiya
     const showEditModal = (project) => {
         setEditingProject(project);
         form.setFieldsValue({
@@ -145,7 +156,28 @@ function AdminPortfolioAgency() {
             role: project.role,
             roleEng: project.roleEng,
             roleRu: project.roleRu,
+            // Upload üçün fileList formatında dəyərlər
+            mainImagePC: project.cardImage ? [{
+                uid: '-1',
+                name: project.cardImage.split('/').pop(),
+                status: 'done',
+                url: getImageUrl(project.cardImage),
+            }] : [],
+            mainImageMobile: project.mobileCardImage ? [{
+                uid: '-1',
+                name: project.mobileCardImage.split('/').pop(),
+                status: 'done',
+                url: getImageUrl(project.mobileCardImage),
+            }] : [],
         });
+        setIsModalVisible(true);
+        console.log(project);
+    };
+
+    // Post modalını açmaq üçün funksiya
+    const showPostModal = () => {
+        setEditingProject(null); // yeni layihə əlavə edirik
+        form.resetFields();
         setIsModalVisible(true);
     };
 
@@ -157,17 +189,29 @@ function AdminPortfolioAgency() {
     const handleSave = async () => {
         try {
             const values = await form.validateFields();
-            console.log('Updated values:', values);
+            console.log('Updated/Post values:', values);
 
-            // Here you would typically call your API to update the project
-            // await updateProject(editingProject.id, values);
+            if (editingProject) {
 
-            message.success('Proje başarıyla güncellendi');
+                message.success('Proje başarıyla güncellendi');
+            } else {
+                // Yeni layihə əlavə et
+                // await createProject(values);
+                message.success('Yeni proje başarıyla əlavə edildi');
+            }
             refetch();
             setIsModalVisible(false);
         } catch (error) {
             console.error('Failed to save:', error);
-            message.error('Proje güncellenirken hata oluştu');
+            message.error('Proje işlənərkən xəta baş verdi');
+        }
+    };
+
+    const handleUploadChange = (info) => {
+        if (info.file.status === 'done') {
+            message.success(`${info.file.name} uğurla yükləndi`);
+        } else if (info.file.status === 'error') {
+            message.error(`${info.file.name} yüklənərkən xəta baş verdi`);
         }
     };
 
@@ -191,7 +235,7 @@ function AdminPortfolioAgency() {
                 <img
                     src={getImageUrl(text)}
                     alt="Card"
-                    style={{width: '80px', height: '80px', objectFit: 'cover', borderRadius: '5px'}}
+                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '5px' }}
                 />
             ),
         },
@@ -203,7 +247,7 @@ function AdminPortfolioAgency() {
                 <img
                     src={getImageUrl(text)}
                     alt="Card"
-                    style={{width: '80px', height: '80px', objectFit: 'cover', borderRadius: '5px'}}
+                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '5px' }}
                 />
             ),
         },
@@ -212,13 +256,13 @@ function AdminPortfolioAgency() {
             dataIndex: 'title',
             key: 'title',
             render: (text) => (
-                <div style={{color: '#0c0c0c', fontWeight: '500'}}>
+                <div style={{ color: '#0c0c0c', fontWeight: '500' }}>
                     {text}
                 </div>
             ),
         },
-        {title: 'Tarix', dataIndex: 'productionDate', key: 'productionDate'},
-        {title: 'Rol', dataIndex: 'role', key: 'role'},
+        { title: 'Tarix', dataIndex: 'productionDate', key: 'productionDate' },
+        { title: 'Rol', dataIndex: 'role', key: 'role' },
         {
             title: 'Veb sayt',
             dataIndex: 'vebSiteLink',
@@ -233,15 +277,15 @@ function AdminPortfolioAgency() {
             title: 'Əməliyyatlar',
             key: 'actions',
             render: (_, record) => (
-                <div style={{display: 'flex', gap: '8px'}}>
+                <div style={{ display: 'flex', gap: '8px' }}>
                     <Button
                         type="primary"
-                        icon={<FiEdit/>}
+                        icon={<FiEdit />}
                         onClick={() => showEditModal(record)}
                     />
                     <Button
                         type="danger"
-                        icon={<FiTrash/>}
+                        icon={<FiTrash />}
                         onClick={() => handleDelete(record.id)}
                     />
                 </div>
@@ -251,12 +295,18 @@ function AdminPortfolioAgency() {
 
     return (
         <section id="adminPortfolioCodes">
+            {/* + düyməsi vasitəsilə yeni layihə əlavə etmək */}
+            <div style={{ marginBottom: '16px', textAlign: 'right' }}>
+                <Button type="primary" icon={<PlusOutlined />} onClick={showPostModal}>
+                    Yeni Proje
+                </Button>
+            </div>
             <Table
                 columns={columns}
                 dataSource={projects}
                 rowKey="id"
                 loading={isLoading}
-                pagination={{pageSize: 10000}}
+                pagination={{ pageSize: 10000 }}
                 components={components}
                 onRow={(record, index) => ({
                     index,
@@ -269,7 +319,7 @@ function AdminPortfolioAgency() {
             />
 
             <Modal
-                title="Projeni Düzənlə"
+                title={editingProject ? "Projeni Düzənlə" : "Yeni Proje"}
                 visible={isModalVisible}
                 onCancel={handleCancel}
                 footer={[
@@ -277,61 +327,81 @@ function AdminPortfolioAgency() {
                         Ləğv et
                     </Button>,
                     <Button key="submit" type="primary" onClick={handleSave}>
-                        Yadda Saxla
+                        {editingProject ? "Yadda Saxla" : "Əlavə et"}
                     </Button>,
                 ]}
                 width={800}
                 destroyOnClose
             >
                 <Form form={form} layout="vertical">
-                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px'}}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         {/* Column 1 */}
                         <div>
                             <Form.Item name="title" label="Başlıq (AZ)">
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             <Form.Item name="titleEng" label="Başlıq (EN)">
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             <Form.Item name="titleRu" label="Başlıq (RU)">
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             <Form.Item name="subTitle" label="Alt başlıq (AZ)">
-                                <TextArea rows={3}/>
+                                <TextArea rows={3} />
                             </Form.Item>
                             <Form.Item name="subTitleEng" label="Alt başlıq (EN)">
-                                <TextArea rows={3}/>
+                                <TextArea rows={3} />
                             </Form.Item>
                             <Form.Item name="subTitleRu" label="Alt başlıq (RU)">
-                                <TextArea rows={3}/>
+                                <TextArea rows={3} />
                             </Form.Item>
                         </div>
 
                         {/* Column 2 */}
                         <div>
                             <Form.Item name="productionDate" label="İstehsal tarixi">
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             <Form.Item name="vebSiteLink" label="Veb sayt linki">
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             <Form.Item name="role" label="Rol (AZ)">
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             <Form.Item name="roleEng" label="Rol (EN)">
-                                <Input/>
+                                <Input />
                             </Form.Item>
                             <Form.Item name="roleRu" label="Rol (RU)">
-                                <Input/>
+                                <Input />
                             </Form.Item>
-                            <Form.Item label="Əsas şəkil (PC)">
-                                <Upload>
-                                    <Button>Yüklə</Button>
+                            <Form.Item
+                                name="mainImagePC"
+                                label="Əsas şəkil (PC)"
+                                valuePropName="fileList"
+                                getValueFromEvent={normFile}
+                            >
+                                <Upload
+                                    name="image"
+                                    listType="picture-card"
+                                    action="/upload.do"
+                                    onChange={handleUploadChange}
+                                >
+                                    <Button icon={<UploadOutlined />}>Yüklə</Button>
                                 </Upload>
                             </Form.Item>
-                            <Form.Item label="Əsas şəkil (MOBİL)">
-                                <Upload>
-                                    <Button>Yüklə</Button>
+                            <Form.Item
+                                name="mainImageMobile"
+                                label="Əsas şəkil (MOBİL)"
+                                valuePropName="fileList"
+                                getValueFromEvent={normFile}
+                            >
+                                <Upload
+                                    name="image"
+                                    listType="picture-card"
+                                    action="/upload.do"
+                                    onChange={handleUploadChange}
+                                >
+                                    <Button icon={<UploadOutlined />}>Yüklə</Button>
                                 </Upload>
                             </Form.Item>
                         </div>
