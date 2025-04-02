@@ -8,6 +8,7 @@ import AdminLeftBar from "../../components/AdminComponents/AdminLeftBar/index.js
 import {Helmet} from "react-helmet-async";
 import Cookies from "js-cookie";
 import AdminPortfolio from "../../components/AdminComponents/AdminPortfolioCodes/index.jsx";
+import AdminPortfolioAgency from "../../components/AdminComponents/AdminPortfolioAgency/index.jsx";
 
 function AdminPage() {
     const location = useLocation();
@@ -56,7 +57,7 @@ function AdminPage() {
                     <AdminPortfolio/>
                 ) : location.pathname === "/cp/dashboard/agency-portfolio" ? (
                     // <Services/>
-                    <></>
+                    <AdminPortfolioAgency/>
                 ) : location.pathname === "/cp/dashboard/brands" ? (
                     // <Brands/>
                     <></>
