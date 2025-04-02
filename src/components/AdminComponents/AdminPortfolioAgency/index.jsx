@@ -1,10 +1,11 @@
 import './index.scss';
-import { Table, Button, message, Modal, Form, Input, Upload } from 'antd';
+import { Table, Button, message, Modal, Form, Input, Upload, Select } from 'antd';
 import { FiTrash, FiEdit } from "react-icons/fi";
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import {
     useGetAllProjectsOfAgencyQuery,
-    useGetAllProjectsOfCodesQuery, usePostProjectsMutation,
+    useGetAllProjectsOfCodesQuery,
+    usePostProjectsMutation,
     usePostReOrderProjectMutation
 } from "../../../services/userApi.jsx";
 import { PORTFOLIO_CARD_IMAGE_URL } from "../../../constants.js";
@@ -13,6 +14,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import update from 'immutability-helper';
 
 const { TextArea } = Input;
+const { Option } = Select;
 
 const ItemTypes = {
     ROW: 'row',
@@ -58,12 +60,13 @@ const DraggableRow = ({ index, moveRow, className, style, ...restProps }) => {
 function AdminPortfolioAgency() {
     const { data: getAllProjectsOfAgency, refetch, isLoading } = useGetAllProjectsOfAgencyQuery();
     const [projects, setProjects] = useState([]);
-    // Modal açıq/bağlı vəziyyəti, həm edit, həm də post üçün istifadə olunur
+    // Modal həm redaktə, həm də post üçün istifadə olunur
     const [isModalVisible, setIsModalVisible] = useState(false);
-    // Əgər mövcud layihə redaktə edilirsə, bu state dəyəri doldurulur, əks halda null
+    // Əgər mövcud layihə redaktə edilirsə, editingProject dolu olur, əks halda null (yeni əlavə)
     const [editingProject, setEditingProject] = useState(null);
     const [form] = Form.useForm();
     const [postProjects] = usePostProjectsMutation();
+    const [postReOrderProject] = usePostReOrderProjectMutation();
 
     // Upload dəyərini normallaşdıran funksiya
     const normFile = (e) => {
@@ -156,6 +159,8 @@ function AdminPortfolioAgency() {
             role: project.role,
             roleEng: project.roleEng,
             roleRu: project.roleRu,
+            // Team: Əgər redaktə zamanı backend-dən team dəyəri gəlirsə, onu da əlavə edin
+            team: project.team,
             // Upload üçün fileList formatında dəyərlər
             mainImagePC: project.cardImage ? [{
                 uid: '-1',
@@ -169,14 +174,16 @@ function AdminPortfolioAgency() {
                 status: 'done',
                 url: getImageUrl(project.mobileCardImage),
             }] : [],
+            // Əlavə şəkillər üçün (Images)
+            images: []
         });
         setIsModalVisible(true);
         console.log(project);
     };
 
-    // Post modalını açmaq üçün funksiya
+    // Yeni layihə əlavə etmək üçün modalı açan funksiya
     const showPostModal = () => {
-        setEditingProject(null); // yeni layihə əlavə edirik
+        setEditingProject(null);
         form.resetFields();
         setIsModalVisible(true);
     };
@@ -192,11 +199,55 @@ function AdminPortfolioAgency() {
             console.log('Updated/Post values:', values);
 
             if (editingProject) {
-
+                // Mövcud layihəni update etmək üçün updateProject funksiyanızı əlavə edin
+                // await updateProject(editingProject.id, values);
                 message.success('Proje başarıyla güncellendi');
             } else {
-                // Yeni layihə əlavə et
-                // await createProject(values);
+                // Yeni layihə əlavə edərkən, backend tələblərinə uyğun payload FormData şəklində yaradılır.
+                const formData = new FormData();
+                // Property-lərin tipləri: string
+                formData.append('title', values.title);
+                formData.append('titleEng', values.titleEng);
+                formData.append('titleRu', values.titleRu);
+                formData.append('subTitle', values.subTitle);
+                formData.append('subTitleEng', values.subTitleEng);
+                formData.append('subTitleRu', values.subTitleRu);
+                formData.append('productionDate', values.productionDate);
+                formData.append('vebSiteLink', values.vebSiteLink);
+                // CardImage və MobileCardImage – string($binary)
+                if (values.mainImagePC && values.mainImagePC[0]) {
+                    if (values.mainImagePC[0].originFileObj) {
+                        formData.append('cardImage', values.mainImagePC[0].originFileObj);
+                    } else {
+                        formData.append('cardImage', values.mainImagePC[0].url);
+                    }
+                } else {
+                    formData.append('cardImage', '');
+                }
+                if (values.mainImageMobile && values.mainImageMobile[0]) {
+                    if (values.mainImageMobile[0].originFileObj) {
+                        formData.append('mobileCardImage', values.mainImageMobile[0].originFileObj);
+                    } else {
+                        formData.append('mobileCardImage', values.mainImageMobile[0].url);
+                    }
+                } else {
+                    formData.append('mobileCardImage', '');
+                }
+                // Rol sahələri – string
+                formData.append('role', values.role);
+                formData.append('roleEng', values.roleEng);
+                formData.append('roleRu', values.roleRu);
+                // Images – array; seçilmiş əlavə şəkilləri FormData-ya əlavə edirik
+                if (values.images && values.images.length > 0) {
+                    values.images.forEach((file) => {
+                        formData.append('images', file.originFileObj);
+                    });
+                }
+                // Team – Select-dən alınan dəyər, lowercase
+                formData.append('team', values.team ? values.team.toLowerCase() : '');
+
+                // Yeni layihəni əlavə etmək üçün postProjects funksiyasını çağırırıq
+                await postProjects(formData).unwrap();
                 message.success('Yeni proje başarıyla əlavə edildi');
             }
             refetch();
@@ -208,10 +259,12 @@ function AdminPortfolioAgency() {
     };
 
     const handleUploadChange = (info) => {
-        if (info.file.status === 'done') {
-            message.success(`${info.file.name} uğurla yükləndi`);
-        } else if (info.file.status === 'error') {
-            message.error(`${info.file.name} yüklənərkən xəta baş verdi`);
+        // Bu funksiya artıq auto-upload göndərmədiyi üçün yalnız seçim anında mesaj verə bilər
+        if (info.file.status === 'done' || info.file.status === 'error') {
+            // Status dəyişiklikləri burada istəyə bağlıdır
+            // Auto-upload olmadığından bu funksiya da istəyə bağlı işləyir
+            // Mesaj vermək istəsəniz:
+            message.info(`${info.file.name} seçildi`);
         }
     };
 
@@ -374,6 +427,14 @@ function AdminPortfolioAgency() {
                             <Form.Item name="roleRu" label="Rol (RU)">
                                 <Input />
                             </Form.Item>
+                            {/* Team select sahəsi */}
+                            <Form.Item name="team" label="Team">
+                                <Select placeholder="Seçin">
+                                    <Option value="academy">academy</Option>
+                                    <Option value="codes">codes</Option>
+                                    <Option value="agency">agency</Option>
+                                </Select>
+                            </Form.Item>
                             <Form.Item
                                 name="mainImagePC"
                                 label="Əsas şəkil (PC)"
@@ -383,7 +444,7 @@ function AdminPortfolioAgency() {
                                 <Upload
                                     name="image"
                                     listType="picture-card"
-                                    action="/upload.do"
+                                    beforeUpload={() => false}  // Auto-upload söndürülür
                                     onChange={handleUploadChange}
                                 >
                                     <Button icon={<UploadOutlined />}>Yüklə</Button>
@@ -398,10 +459,26 @@ function AdminPortfolioAgency() {
                                 <Upload
                                     name="image"
                                     listType="picture-card"
-                                    action="/upload.do"
+                                    beforeUpload={() => false}
                                     onChange={handleUploadChange}
                                 >
                                     <Button icon={<UploadOutlined />}>Yüklə</Button>
+                                </Upload>
+                            </Form.Item>
+                            {/* Additional Images sahəsi – backend Images array üçün */}
+                            <Form.Item
+                                name="images"
+                                label="Əlavə Şəkillər"
+                                valuePropName="fileList"
+                                getValueFromEvent={normFile}
+                            >
+                                <Upload
+                                    name="images"
+                                    listType="picture-card"
+                                    multiple
+                                    beforeUpload={() => false}
+                                >
+                                    <Button icon={<UploadOutlined />}>Şəkil Seç</Button>
                                 </Upload>
                             </Form.Item>
                         </div>

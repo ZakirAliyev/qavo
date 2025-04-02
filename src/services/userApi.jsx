@@ -45,7 +45,7 @@ export const userApi = createApi({
         }),
         postProjects: builder.mutation({
             query: (data) => ({
-                url: `/Project/get-all-projects-of-agency`,
+                url: `/Project/create-project`,
                 method: 'POST',
                 body: (data),
             }),
