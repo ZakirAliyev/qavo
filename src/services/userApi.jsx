@@ -63,6 +63,13 @@ export const userApi = createApi({
                 url: `/OurTeam/get-all-our-teams`,
             }),
         }),
+        postUpdateProject: builder.mutation({
+            query: (data) => ({
+                url: `/Project/update-project`,
+                method: 'PUT',
+                body: (data),
+            }),
+        }),
     }),
 })
 export const {
@@ -74,4 +81,5 @@ export const {
     useGetAllTeamMembersQuery,
     useGetAllProjectsOfAgencyQuery,
     usePostProjectsMutation,
+    usePostUpdateProjectMutation
 } = userApi
