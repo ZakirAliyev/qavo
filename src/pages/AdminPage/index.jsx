@@ -9,6 +9,7 @@ import {Helmet} from "react-helmet-async";
 import Cookies from "js-cookie";
 import AdminPortfolio from "../../components/AdminComponents/AdminPortfolioCodes/index.jsx";
 import AdminPortfolioAgency from "../../components/AdminComponents/AdminPortfolioAgency/index.jsx";
+import AdminPortfolioAcademy from "../../components/AdminComponents/AdminPortfolioAcademy/index.jsx";
 
 function AdminPage() {
     const location = useLocation();
@@ -58,9 +59,9 @@ function AdminPage() {
                 ) : location.pathname === "/cp/dashboard/agency-portfolio" ? (
                     // <Services/>
                     <AdminPortfolioAgency/>
-                ) : location.pathname === "/cp/dashboard/brands" ? (
+                ) : location.pathname === "/cp/dashboard/academy-portfolio" ? (
                     // <Brands/>
-                    <></>
+                    <AdminPortfolioAcademy/>
                 ) : location.pathname === "/cp/dashboard/categories" ? (
                     // <Categories/>
                     <></>
