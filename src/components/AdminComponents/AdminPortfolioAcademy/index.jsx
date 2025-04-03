@@ -4,8 +4,7 @@ import { FiTrash, FiEdit } from "react-icons/fi";
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import {
     useDeleteProjectMutation,
-    useGetAllProjectsOfAgencyQuery,
-    useGetAllProjectsOfCodesQuery,
+    useGetAllProjectsOfAcademyQuery,
     usePostProjectsMutation,
     usePostReOrderProjectMutation,
     usePostUpdateProjectMutation
@@ -59,8 +58,8 @@ const DraggableRow = ({ index, moveRow, className, style, ...restProps }) => {
     );
 };
 
-function AdminPortfolioAgency() {
-    const { data: getAllProjectsOfAgency, refetch, isLoading } = useGetAllProjectsOfAgencyQuery();
+function AdminPortfolioAcademy() {
+    const { data: getAllProjectsOfAcademy, refetch, isLoading } = useGetAllProjectsOfAcademyQuery();
     const [projects, setProjects] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingProject, setEditingProject] = useState(null);
@@ -80,10 +79,10 @@ function AdminPortfolioAgency() {
 
     // Layihə məlumatlarını yükləyirik
     useEffect(() => {
-        if (getAllProjectsOfAgency?.data) {
-            setProjects(getAllProjectsOfAgency.data);
+        if (getAllProjectsOfAcademy?.data) {
+            setProjects(getAllProjectsOfAcademy.data);
         }
-    }, [getAllProjectsOfAgency]);
+    }, [getAllProjectsOfAcademy]);
 
     // Sıralamanın yenilənməsi
     const handleReOrder = useCallback(async (projects) => {
@@ -514,4 +513,4 @@ function AdminPortfolioAgency() {
     );
 }
 
-export default AdminPortfolioAgency;
+export default AdminPortfolioAcademy;

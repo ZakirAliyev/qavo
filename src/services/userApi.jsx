@@ -43,6 +43,11 @@ export const userApi = createApi({
                 url: `/Project/get-all-projects-of-agency`,
             }),
         }),
+        getAllProjectsOfAcademy: builder.query({
+            query: () => ({
+                url: `/Project/get-all-projects-of-academy`,
+            }),
+        }),
         postProjects: builder.mutation({
             query: (data) => ({
                 url: `/Project/create-project`,
@@ -89,4 +94,5 @@ export const {
     usePostProjectsMutation,
     usePostUpdateProjectMutation,
     useDeleteProjectMutation,
+    useGetAllProjectsOfAcademyQuery,
 } = userApi

@@ -33,7 +33,7 @@ function AdminLeftBar() {
                     </div>
                     <div
                         className={`route ${isOrdersSelected ? 'selected' : ''}`}
-                        onClick={() => navigate('/cp/dashboard/agency-portfolio')}
+                        onClick={() => navigate('/cp/dashboard/academy-portfolio')}
                     >
                         <FaBorderAll/>
                         <span>Qavo Academy</span>

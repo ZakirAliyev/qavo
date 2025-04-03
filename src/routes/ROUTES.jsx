@@ -42,7 +42,11 @@ export const ROUTES = [
             {
                 path: 'cp/dashboard/agency-portfolio',
                 element: <AdminPage/>,
-            }
+            },
+            {
+                path: 'cp/dashboard/academy-portfolio',
+                element: <AdminPage/>,
+            },
         ]
     }
 ];
