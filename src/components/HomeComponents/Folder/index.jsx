@@ -1,8 +1,8 @@
 import './index.scss';
 import {useEffect, useState, useRef} from 'react';
-import image1 from '/src/assets/codes.jpg';
-import image2 from '/src/assets/folder2.jpg';
-import image3 from '/src/assets/folder3.jpg';
+import image1 from '/src/assets/folder1.png';
+import image2 from '/src/assets/folder2.png';
+import image3 from '/src/assets/folder3.png';
 import {useNavigate} from "react-router";
 
 function Folder() {

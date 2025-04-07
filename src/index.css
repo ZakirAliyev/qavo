@@ -16,6 +16,10 @@
     word-wrap: break-word;
 }
 
+.red-star {
+    color: red;
+}
+
 
 html {
     scroll-behavior: smooth;

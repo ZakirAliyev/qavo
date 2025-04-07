@@ -1,15 +1,15 @@
 import './index.scss';
-import {useEffect, useState, useRef} from 'react';
-import {useNavigate} from "react-router";
-import {useGetAllProjectQuery} from "../../../services/userApi.jsx";
-import {PORTFOLIO_CARD_IMAGE_URL} from "../../../constants.js";
-import {Blocks, Triangle} from "react-loader-spinner";
+import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from "react-router";
+import { useGetAllProjectQuery } from "../../../services/userApi.jsx";
+import { PORTFOLIO_CARD_IMAGE_URL } from "../../../constants.js";
+import { Triangle } from "react-loader-spinner";
 
-function FolderPortfolio({portfolioName}) {
+function FolderPortfolio({ portfolioName }) {
     const navigate = useNavigate();
     const teamKey = portfolioName.split('-')[1];
 
-    const {data: getAllProject, isLoading: getAllProjectLoading} = useGetAllProjectQuery();
+    const { data: getAllProject, isLoading: getAllProjectLoading } = useGetAllProjectQuery();
     const projects = getAllProject?.data || [];
     const filteredPortfolio = projects.filter(item => item.team === teamKey);
 
@@ -17,10 +17,22 @@ function FolderPortfolio({portfolioName}) {
     const [scrollDirection, setScrollDirection] = useState('down');
     const lastScrollY = useRef(0);
 
-    const [cursorPos, setCursorPos] = useState({x: 0, y: 0});
+    const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
     const [cursorHover, setCursorHover] = useState(false);
 
     const [isAnimating, setIsAnimating] = useState(false);
+
+    // Pencere genişliğini takip etmek için state ekleyelim
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -41,7 +53,7 @@ function FolderPortfolio({portfolioName}) {
 
     useEffect(() => {
         const moveCursor = (e) => {
-            setCursorPos({x: e.clientX, y: e.clientY});
+            setCursorPos({ x: e.clientX, y: e.clientY });
         };
         window.addEventListener("mousemove", moveCursor);
         return () => window.removeEventListener("mousemove", moveCursor);
@@ -78,7 +90,7 @@ function FolderPortfolio({portfolioName}) {
                 />
             </div>
         ) : (
-            <section id="folderPortfolio" style={{height: `${sectionHeight}vh`}}>
+            <section id="folderPortfolio" style={{ height: `${sectionHeight}vh` }}>
                 {filteredPortfolio.map((item, i) => {
                     let scale = 0.8;
                     let blur = 10;
@@ -93,6 +105,11 @@ function FolderPortfolio({portfolioName}) {
                         blur = 5 - 5 * progress;
                         zIndex = progress < 0.5 ? 9 : 10;
                     }
+
+                    // Eğer pencere genişliği 992 pikselden küçükse mobileCardImage, aksi halde cardImage kullanılıyor.
+                    const imageSrc = windowWidth < 992
+                        ? PORTFOLIO_CARD_IMAGE_URL + item.mobileCardImage
+                        : PORTFOLIO_CARD_IMAGE_URL + item.cardImage;
 
                     return (
                         <div
@@ -109,7 +126,7 @@ function FolderPortfolio({portfolioName}) {
                             onClick={() => handleNavigate(`/portfolio/${portfolioName}/${item.id}`)}
                         >
                             <div className={"imgOverlay"}></div>
-                            <img src={PORTFOLIO_CARD_IMAGE_URL + item?.cardImage} alt={`Image ${i + 1}`}/>
+                            <img src={imageSrc} alt={`Image ${i + 1}`} />
                             <div className="overlay">
                                 <div className={"typeWrapper"}>
                                     <div className="type">{item?.productionDate}</div>
@@ -127,7 +144,7 @@ function FolderPortfolio({portfolioName}) {
 
                 <div
                     className={`custom-cursor ${cursorHover ? 'hovered' : ''}`}
-                    style={{left: cursorPos.x, top: cursorPos.y}}
+                    style={{ left: cursorPos.x, top: cursorPos.y }}
                 >
                     {cursorHover && '[ AÇIN ]'}
                 </div>

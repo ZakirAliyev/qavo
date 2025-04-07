@@ -35,9 +35,8 @@ function AdminLogin() {
                         timer: 1500,
                     });
                     resetForm()
-                    navigate('/cp/dashboard')
-                    Cookies.set("expoToken", response?.data?.token)
-                    Cookies.set("expoRole", "Admin")
+                    navigate('/cp/dashboard/portfolio')
+                    Cookies.set("qavoCodesToken", response?.data?.token)
                 }
             } catch (error) {
                 await Swal.fire({
