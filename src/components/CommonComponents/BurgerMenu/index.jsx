@@ -66,7 +66,7 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
                             <Title
                                 title={title}
                                 fontSize={computedFontSize}
-                                fontFamily={"'Six Caps', sans-serif"}
+                                fontFamily={"'Credit Block', sans-serif"}
                                 color={hoveredIndex === index ? "white" : "#555"}
                                 selected={index === 0}
                             />
