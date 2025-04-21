@@ -365,7 +365,6 @@ table, th, td, tr, thead, tbody {
         background-color: #e16363;
     }
 }
-
-:where(.css-dev-only-do-not-override-1a3rktk).ant-image-preview-root .ant-image-preview-wrap {
+:where(.css-1a3rktk).ant-image-preview-root .ant-image-preview-wrap {
     backdrop-filter: blur(10px);
 }
