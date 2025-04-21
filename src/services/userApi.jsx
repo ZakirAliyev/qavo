@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://qavocodes-001-site1.qtempurl.com/api/',
+        baseUrl: 'https://api.qavo.az/api/',
         prepareHeaders: (headers) => {
             const token = Cookies.get('qavoCodesToken');
             if (token) {
