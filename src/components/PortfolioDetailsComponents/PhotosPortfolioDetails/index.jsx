@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import {PORTFOLIO_IMAGE_URL} from "../../../constants.js";
+import { Image } from 'antd';
 
 function PhotosPortfolioDetails({ project }) {
     const [isAnimating, setIsAnimating] = useState(false);
@@ -36,9 +37,8 @@ function PhotosPortfolioDetails({ project }) {
                         data-aos={index % 2 === 0 ? "fade-right" : "fade-up"}
                     >
                         <div className="video-wrapper">
-                            <img
+                            <Image
                                 src={PORTFOLIO_IMAGE_URL + img}
-                                alt={`Image ${index + 1}`}
                             />
                         </div>
                     </div>

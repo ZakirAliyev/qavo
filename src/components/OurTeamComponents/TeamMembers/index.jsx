@@ -10,16 +10,25 @@ function TeamMembers() {
     const { data: getAllTeamMembers } = useGetAllTeamMembersQuery();
     const teamMembers = getAllTeamMembers?.data;
 
+    // Check if the device is desktop (based on window width, e.g., > 768px)
+    const isDesktop = window.innerWidth > 768;
+
     const handleMouseEnter = (index) => {
-        setHoveredIndex(index);
+        if (isDesktop) {
+            setHoveredIndex(index);
+        }
     };
 
     const handleMouseLeave = () => {
-        setHoveredIndex(null);
+        if (isDesktop) {
+            setHoveredIndex(null);
+        }
     };
 
     const handleMouseMove = (e) => {
-        setImagePosition({ x: e.clientX, y: e.clientY });
+        if (isDesktop) {
+            setImagePosition({ x: e.clientX, y: e.clientY });
+        }
     };
 
     return (
@@ -27,13 +36,14 @@ function TeamMembers() {
             {teamMembers && teamMembers.map((item, index) => (
                 <div
                     key={index}
+                    className="team-member"
                     onMouseEnter={() => handleMouseEnter(index)}
                     onMouseLeave={handleMouseLeave}
                     onMouseMove={handleMouseMove}
                 >
                     <div className="wrapper">
                         <div className="type">{item?.sinceYear}-ci ildən</div>
-                        <div className={`name ${hoveredIndex !== null && hoveredIndex !== index ? "gray" : ""}`}>
+                        <div className={`name ${isDesktop && hoveredIndex !== null && hoveredIndex !== index ? "gray" : ""}`}>
                             {item?.fullNameEng}
                         </div>
                         <div className="type">{item?.position}</div>
@@ -41,8 +51,9 @@ function TeamMembers() {
                     {index < teamMembers.length - 1 && <div className="line"></div>}
                 </div>
             ))}
-            {teamMembers && hoveredIndex !== null && (
+            {isDesktop && teamMembers && hoveredIndex !== null && (
                 <img
+                    className="hover-image"
                     src={OUR_TEAM_IMAGES_URL + teamMembers[hoveredIndex].profilImage}
                     alt="Hover preview"
                     style={{

@@ -15,8 +15,8 @@ function Information() {
                 <div className={"row"}>
                     <div className={"box col-4 col-md-6 col-sm-6 col-xs-6"} data-aos={"fade-right"}>
                         <RiTelegram2Fill className={"icon"}/>
-                        <Link to={"mailto:info@qavo.agency"}>
-                            <div className={"main"}>info@qavo.agency</div>
+                        <Link to={"mailto:info@qavo.az"}>
+                            <div className={"main"}>info@qavo.az</div>
                         </Link>
                         <div className={"secondary"}>Email</div>
                     </div>

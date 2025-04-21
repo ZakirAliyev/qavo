@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./index.scss";
 import Title from "../Title/index.jsx";
+import Title1 from "../Title1/index.jsx";
 
 function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
     const [showWave, setShowWave] = useState(false);
@@ -43,7 +44,7 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
         return () => clearTimeout(timer);
     }, []);
 
-    const titles = ["PORTFOLIO", "HAQQIMIZDA", "HEKAYEMIZ", "MAGAZA", "закир", "DAHA ÇOXU"];
+    const titles = ["PORTFOLİO", "HAQQIMIZDA", "ƏLAQƏ"];
 
     return (
         <section
@@ -63,7 +64,7 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
                         >
-                            <Title
+                            <Title1
                                 title={title}
                                 fontSize={computedFontSize}
                                 fontFamily={"'Credit Block', sans-serif"}

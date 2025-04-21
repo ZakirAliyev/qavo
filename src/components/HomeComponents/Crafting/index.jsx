@@ -39,7 +39,7 @@ function Crafting() {
             </div>
             <button>
                 <div className={"title"}>
-                    <Title title={"Bütün İşləri Gör"}/>
+                    <Title title={"Xidmət sahələrimiz"}/>
                 </div>
             </button>
         </section>

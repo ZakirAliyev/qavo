@@ -3,13 +3,13 @@ import "./index.scss";
 
 function Skills() {
     const skills = [
-        "WEB DESIGN",
-        "MOBILE APP DEVELOPMENT",
-        "UX/UI DESIGN",
-        "SEO OPTIMIZATION",
-        "SOCIAL MEDIA MANAGEMENT",
-        "DATA ANALYTICS",
-        "CONTENT CREATION"
+        "WEB DİZAYN",
+        "MOBİL TƏTBİQ HAZIRLANMASI",
+        "UI/UX DİZAYNI",
+        "SEO OPTİMİZASYASI",
+        "SOSİAL MEDİA İDARƏETMƏSİ",
+        "DATA ANALİTİKASI",
+        "MƏZMUNUN YARADICILIĞI"
     ];
 
     const skillRefs = useRef([]);
