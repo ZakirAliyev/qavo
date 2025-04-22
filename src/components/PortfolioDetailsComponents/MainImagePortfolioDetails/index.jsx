@@ -69,6 +69,8 @@ function MainImagePortfolioDetails({ project }) {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
     return (
         <div style={{ height: containerHeight }}>
             <div className="blur-div">
@@ -79,7 +81,11 @@ function MainImagePortfolioDetails({ project }) {
                         style={{ willChange: "transform" }}
                     >
                         <img
-                            src={PORTFOLIO_CARD_IMAGE_URL + project?.cardImage}
+                            src={windowWidth < 992 ? (
+                                PORTFOLIO_CARD_IMAGE_URL + project?.mobileCardImage
+                            ) : (
+                                PORTFOLIO_CARD_IMAGE_URL + project?.cardImage
+                            )}
                             alt="Image"
                         />
                         <div className="bottomFade"></div>

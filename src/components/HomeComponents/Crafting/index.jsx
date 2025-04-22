@@ -34,7 +34,7 @@ function Crafting() {
     return (
         <section id="crafting">
             <div className={`description`}>
-                <div data-aos={"fade-left"}>DİZAYN SADƏCƏ GÖRÜNÜŞ DEYİL</div>
+                <div data-aos={"fade-up"}>DİZAYN SADƏCƏ GÖRÜNÜŞ DEYİL</div>
                 <div data-aos={"fade-right"}>O, RUHUN ZÖVQLƏ DANIŞDIĞI DİLDİR.</div>
             </div>
             <button>

@@ -30,6 +30,8 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       transition: background-position 0.2s ease;
+      margin-bottom: -20px;
+      margin-top: 20px;
     }
 
     .name.gray {
@@ -46,5 +48,24 @@
     width: 100%;
     height: 1px;
     background-color: #303030;
+  }
+
+  @media screen and (max-width: 992px){
+    .wrapper {
+      padding: 0 16px;
+      flex-direction: column;
+      align-items: start;
+    }
+
+    .line {
+      width: 100%;
+      height: 1px;
+      background-color: #303030;
+      margin: 32px 0;
+    }
+
+    .name {
+      margin-top: 10px;
+    }
   }
 }

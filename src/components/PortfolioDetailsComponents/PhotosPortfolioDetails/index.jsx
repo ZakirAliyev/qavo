@@ -4,6 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import {PORTFOLIO_IMAGE_URL} from "../../../constants.js";
 import { Image } from 'antd';
+import {useLocation} from "react-router";
 
 function PhotosPortfolioDetails({ project }) {
     const [isAnimating, setIsAnimating] = useState(false);
@@ -21,14 +22,19 @@ function PhotosPortfolioDetails({ project }) {
 
     // Use the images from the project prop and filter for .webp files
     const images = project?.images?.filter(image => image.endsWith('.webp')) || [];
+    const location = useLocation();
 
     return (
         <section
             id="photosPortfolioDetails"
             className={isAnimating ? "animating" : ""}
         >
-            <div className="title" data-aos="fade-right">Postlar</div>
-            <div className="description" data-aos="fade-up">HAZIRLADIĞIMIZ ŞƏKİL TİPLİ KONTENTLƏR</div>
+            <div className="title" data-aos="fade-right">
+                {location.pathname.includes("/qavo-codes") ? <>ŞƏKİLLƏR</> : <>POSTLAR</>}
+            </div>
+            <div className="description" data-aos="fade-up">
+                {location.pathname.includes("/qavo-codes") ? <>WEB-SATYDAN ÖRNƏK ŞƏKİLLƏR</> : <>HAZIRLADIĞIMIZ ŞƏKİL TİPLİ KONTENTLƏR</>}
+            </div>
             <div className="row">
                 {images.map((img, index) => (
                     <div

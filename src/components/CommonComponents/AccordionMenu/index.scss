@@ -50,8 +50,10 @@
   @media screen and (max-width: 992px) {
     .box {
       margin-bottom: 50px;
+      align-items: start;
       .ourservices {
         font-size: 125px;
+        padding: 0 24px;
       }
     }
   }
@@ -61,6 +63,7 @@
       margin-bottom: 50px;
       .ourservices {
         font-size: 100px;
+        padding: 0 24px;
       }
     }
   }

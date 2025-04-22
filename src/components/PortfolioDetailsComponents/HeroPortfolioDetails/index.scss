@@ -9,12 +9,20 @@
   .name {
     font-size: 350px;
     cursor: pointer;
+    white-space: pre; /* Preserve whitespace to respect spaces */
 
     span {
       display: inline-block;
       transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       transform-origin: bottom center;
       font-family: "Credit Block", sans-serif;
+    }
+
+    /* Specific styling for space spans */
+    span.space {
+      width: 20px; /* Match JSX minWidth */
+      display: inline-block;
+      content: "\00A0"; /* Ensure non-breaking space is respected */
     }
   }
 

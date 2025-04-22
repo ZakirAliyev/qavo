@@ -200,8 +200,6 @@ function AdminPortfolioCodes() {
     const handleSave = async () => {
         try {
             const values = await form.validateFields();
-            console.log('Updated/Post values:', values);
-
             if (editingProject) {
                 // Update əməliyyatı üçün FormData yaradılır
                 const formData = new FormData();

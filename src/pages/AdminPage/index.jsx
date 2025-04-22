@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import AdminPortfolio from "../../components/AdminComponents/AdminPortfolioCodes/index.jsx";
 import AdminPortfolioAgency from "../../components/AdminComponents/AdminPortfolioAgency/index.jsx";
 import AdminPortfolioAcademy from "../../components/AdminComponents/AdminPortfolioAcademy/index.jsx";
+import AdminTeamMember from "../../components/AdminComponents/AdminTeamMember/index.jsx";
 
 function AdminPage() {
     const location = useLocation();
@@ -54,26 +55,13 @@ function AdminPage() {
                     </div>
                 </div>
                 {location.pathname === "/cp/dashboard/portfolio" ? (
-                    // <Products/>
                     <AdminPortfolio/>
                 ) : location.pathname === "/cp/dashboard/agency-portfolio" ? (
-                    // <Services/>
                     <AdminPortfolioAgency/>
                 ) : location.pathname === "/cp/dashboard/academy-portfolio" ? (
-                    // <Brands/>
                     <AdminPortfolioAcademy/>
-                ) : location.pathname === "/cp/dashboard/categories" ? (
-                    // <Categories/>
-                    <></>
-                ) : location.pathname === "/cp/dashboard/banners" ? (
-                    // <Banners/>
-                    <></>
-                ) : location.pathname === "/cp/dashboard/orders" ? (
-                    // <Orders/>
-                    <></>
-                ) : location.pathname === "/cp/dashboard/portfolios" ? (
-                    // <PortfoliosPanel/>
-                    <></>
+                ) : location.pathname === "/cp/dashboard/team-member" ? (
+                    <AdminTeamMember/>
                 ) : null}
             </div>
         </section>

@@ -1,0 +1,26 @@
+#adminTeamMember {
+  background-color: #ededed;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+
+  .drop-over-downward {
+    td {
+      border-bottom: 2px dashed #1890ff;
+    }
+  }
+
+  .drop-over-upward {
+    td {
+      border-top: 2px dashed #1890ff;
+    }
+  }
+
+  .ant-table-tbody > tr.drop-over-downward > td {
+    border-bottom: 2px dashed #1890ff;
+  }
+
+  .ant-table-tbody > tr.drop-over-upward > td {
+    border-top: 2px dashed #1890ff;
+  }
+}

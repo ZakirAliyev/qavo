@@ -177,7 +177,6 @@ function AdminPortfolioAcademy() {
             images: []
         });
         setIsModalVisible(true);
-        console.log(project);
     };
 
     // Yeni layihə əlavə etmək üçün modalı açan funksiya
@@ -195,8 +194,6 @@ function AdminPortfolioAcademy() {
     const handleSave = async () => {
         try {
             const values = await form.validateFields();
-            console.log('Updated/Post values:', values);
-
             if (editingProject) {
                 // Update əməliyyatı üçün FormData yaradılır
                 const formData = new FormData();

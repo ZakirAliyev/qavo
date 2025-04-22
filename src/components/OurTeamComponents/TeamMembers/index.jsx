@@ -10,8 +10,8 @@ function TeamMembers() {
     const { data: getAllTeamMembers } = useGetAllTeamMembersQuery();
     const teamMembers = getAllTeamMembers?.data;
 
-    // Check if the device is desktop (based on window width, e.g., > 768px)
-    const isDesktop = window.innerWidth > 768;
+    // Check if the device is desktop (based on window width, e.g., > 992px)
+    const isDesktop = window.innerWidth > 992;
 
     const handleMouseEnter = (index) => {
         if (isDesktop) {
@@ -33,6 +33,7 @@ function TeamMembers() {
 
     return (
         <section id="teamMembers">
+            <div className="line"></div>
             {teamMembers && teamMembers.map((item, index) => (
                 <div
                     key={index}
@@ -62,8 +63,6 @@ function TeamMembers() {
                         left: imagePosition.x,
                         transform: 'translate(-50%, -50%)',
                         pointerEvents: 'none',
-                        opacity: hoveredIndex !== null ? 1 : 0,
-                        transition: 'opacity 0.5s ease'
                     }}
                 />
             )}

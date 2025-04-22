@@ -22,8 +22,6 @@ function VideosPortfolioDetails({project}) {
 
     const videos = project?.images?.filter(video => video.endsWith('.webm')) || [];
 
-    console.log(videos);
-
     useEffect(() => {
         const observerOptions = {
             root: null,
@@ -60,29 +58,33 @@ function VideosPortfolioDetails({project}) {
             id="videosPortfolioDetails"
             className={isAnimating ? "animating" : ""}
         >
-            <div className="title" data-aos="fade-right">Videolar</div>
-            <div className="description" data-aos="fade-up">HAZIRLADIĞIMIZ VİDEO TİPLİ KONTENTLƏR</div>
-            <div className="row">
-                {videos.map((video, index) => (
-                    <div
-                        className="col-3 col-md-3 col-sm-6 col-xs-6"
-                        key={index}
-                        data-aos={index % 2 === 0 ? "fade-right" : "fade-up"}
-                    >
-                        <div className="video-wrapper">
-                            <video
-                                controls
-                                muted
-                                preload="none"
-                                data-src={`${PORTFOLIO_VIDEO_URL}${video}`}
-                                ref={(el) => (videoRefs.current[index] = el)}
+            {videos && videos.length > 0 && (
+                <>
+                    <div className="title" data-aos="fade-right">Videolar</div>
+                    <div className="description" data-aos="fade-up">HAZIRLADIĞIMIZ VİDEO TİPLİ KONTENTLƏR</div>
+                    <div className="row">
+                        {videos.map((video, index) => (
+                            <div
+                                className="col-3 col-md-3 col-sm-6 col-xs-6"
+                                key={index}
+                                data-aos={index % 2 === 0 ? "fade-right" : "fade-up"}
                             >
-                                Tarayıcınız video etiketini desteklemiyor.
-                            </video>
-                        </div>
+                                <div className="video-wrapper">
+                                    <video
+                                        controls
+                                        muted
+                                        preload="none"
+                                        data-src={`${PORTFOLIO_VIDEO_URL}${video}`}
+                                        ref={(el) => (videoRefs.current[index] = el)}
+                                    >
+                                        Tarayıcınız video etiketini desteklemiyor.
+                                    </video>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                </>
+            )}
         </section>
     );
 }

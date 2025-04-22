@@ -25,7 +25,6 @@ function PortfolioDetailsPage() {
     const {data: getProjectById} = useGetProjectByIdQuery(id)
     const project = getProjectById?.data
 
-    // , isLoading: getProjectByIdLoading
 
     useEffect(() => {
         const timer = setTimeout(() => {

@@ -19,7 +19,6 @@ function HomePage() {
 
     // const {data: getAllProject} = useGetAllProjectQuery()
     // const pro = getAllProject?.data
-    // console.log(pro)
 
     useEffect(() => {
         const timer = setTimeout(() => {

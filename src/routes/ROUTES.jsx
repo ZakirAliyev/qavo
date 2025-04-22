@@ -5,6 +5,7 @@ import PortfolioDetailsPage from "../pages/PortfolioDetailsPage/index.jsx";
 import AdminLogin from "../components/AdminComponents/AdminLogin/index.jsx";
 import AdminPage from "../pages/AdminPage/index.jsx";
 import OurTeamPage from "../pages/OurTeamPage/index.jsx";
+import ErrorPage from "../pages/ErrorPage/index.jsx"; // ErrorPage komponentini import edirik
 
 export const ROUTES = [
     {
@@ -47,6 +48,14 @@ export const ROUTES = [
                 path: 'cp/dashboard/academy-portfolio',
                 element: <AdminPage/>,
             },
+            {
+                path: 'cp/dashboard/team-member',
+                element: <AdminPage/>,
+            },
         ]
+    },
+    {
+        path: '*', // Bütün uyğun olmayan yollar üçün
+        element: <ErrorPage/>
     }
 ];

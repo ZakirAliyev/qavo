@@ -1,10 +1,9 @@
 import "./index.scss";
-import {useRef, useEffect, useState} from "react";
-import {useParams} from "react-router";
-import {useGetProjectByIdQuery} from "../../../services/userApi.jsx";
+import { useRef, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useGetProjectByIdQuery } from "../../../services/userApi.jsx";
 
-function HeroPortfolioDetails({project}) {
-
+function HeroPortfolioDetails({ project }) {
     const letters = project?.title.toUpperCase().split("");
     const nameContainerRef = useRef(null);
     const spanRefs = useRef([]);
@@ -26,7 +25,7 @@ function HeroPortfolioDetails({project}) {
         return clamped * clamped * (3 - 2 * clamped);
     };
 
-    // Mouse move animasyonu: harflerin scaleY değeri mouse'a göre değişiyor.
+    // Mouse move animation: Letters' scaleY changes based on mouse position
     useEffect(() => {
         const container = nameContainerRef.current;
 
@@ -61,7 +60,7 @@ function HeroPortfolioDetails({project}) {
         };
     }, []);
 
-    // Overlay animasyonu: bileşen yüklendiğinde kısa süreli kaplama
+    // Overlay animation: Temporary overlay on component load
     useEffect(() => {
         setIsAnimating(true);
         const timer = setTimeout(() => {
@@ -70,22 +69,30 @@ function HeroPortfolioDetails({project}) {
         return () => clearTimeout(timer);
     }, []);
 
+    // Truncate subtitle up to the first period
+    const truncatedSubtitle = project?.subTitle
+        ? project.subTitle.split(".")[0] + (project.subTitle.includes(".") ? "." : "")
+        : "";
+
     return (
         <section id="heroPortfolioDetails">
             <div className="name" ref={nameContainerRef}>
-                {letters && letters.map((letter, index) => (
-                    <span
-                        key={index}
-                        ref={addToRefs}
-                        style={{animationDelay: `${index * 0.1}s`}}
-                        className="wave-letter"
-                        onAnimationEnd={(e) => e.target.classList.remove("wave-letter")}
-                    >
-            {letter}
-          </span>
-                ))}
+                {letters &&
+                    letters.map((letter, index) => (
+                        <span
+                            key={index}
+                            ref={addToRefs}
+                            style={{
+                                animationDelay: `${index * 0.1}s`,
+                            }}
+                            className={`wave-letter ${letter === " " ? "space" : ""}`}
+                            onAnimationEnd={(e) => e.target.classList.remove("wave-letter")}
+                        >
+                            {letter === " " ? "\u00A0" : letter}
+                        </span>
+                    ))}
             </div>
-            <div className="description">{project?.subTitle}</div>
+            <div className="description">{truncatedSubtitle}</div>
             {isAnimating && <div className="transition-overlay1"></div>}
         </section>
     );

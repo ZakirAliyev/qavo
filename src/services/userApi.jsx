@@ -68,10 +68,37 @@ export const userApi = createApi({
                 url: `/OurTeam/get-all-our-teams`,
             }),
         }),
+        updateTeamMembers: builder.mutation({
+            query: (data) => ({
+                url: `/OurTeam/update-our-team`,
+                method: 'PUT',
+                body: (data),
+            }),
+        }),
+       reOrderTeamMembers: builder.mutation({
+            query: (data) => ({
+                url: `/OurTeam/replace-our-team`,
+                method: 'PUT',
+                body: (data),
+            }),
+        }),
+        deleteTeamMember: builder.mutation({
+            query: (id) => ({
+                url: `/OurTeam/delete-our-team/${id}`,
+                method: 'DELETE',
+            }),
+        }),
         postUpdateProject: builder.mutation({
             query: (data) => ({
                 url: `/Project/update-project`,
                 method: 'PUT',
+                body: (data),
+            }),
+        }),
+        postTeamMember: builder.mutation({
+            query: (data) => ({
+                url: `/OurTeam/create-our-team`,
+                method: 'POST',
                 body: (data),
             }),
         }),
@@ -95,4 +122,8 @@ export const {
     usePostUpdateProjectMutation,
     useDeleteProjectMutation,
     useGetAllProjectsOfAcademyQuery,
+    useUpdateTeamMembersMutation,
+    useDeleteTeamMemberMutation,
+    useReOrderTeamMembersMutation,
+    usePostTeamMemberMutation,
 } = userApi

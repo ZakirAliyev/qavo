@@ -3,7 +3,7 @@ import {useRef, useEffect, useState} from "react";
 import Title from "../../CommonComponents/Title/index.jsx";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import {useNavigate} from "react-router";
+import {useLocation} from "react-router";
 
 function InformationPortfolioDetails({project}) {
 
@@ -16,7 +16,7 @@ function InformationPortfolioDetails({project}) {
         duration: 1000
     });
 
-    const [isAnimating, setIsAnimating] = useState(false);
+    const [, setIsAnimating] = useState(false);
 
     const addToRefs = (el) => {
         if (el && !spanRefs.current.includes(el)) {
@@ -66,7 +66,6 @@ function InformationPortfolioDetails({project}) {
         };
     }, []);
 
-    // Overlay animasyonu: bileşen yüklendiğinde kısa süreli kaplama
     useEffect(() => {
         setIsAnimating(true);
         const timer = setTimeout(() => {
@@ -75,7 +74,8 @@ function InformationPortfolioDetails({project}) {
         return () => clearTimeout(timer);
     }, []);
 
-    const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location.pathname.includes("/qavo-codes"));
 
     return (
         <section id="informationPortfolioDetails">
@@ -104,12 +104,14 @@ function InformationPortfolioDetails({project}) {
                         <div className={"box10"}>
                             <div className={"span"} data-aos={"fade-right"}>TARİX</div>
                             <span data-aos={"fade-right"}>Yanvar {project?.productionDate}</span>
-                            <div className={"span span1"} data-aos={"fade-right"}>ƏMƏKDAŞLIQ</div>
+                            <div className={"span span1"} data-aos={"fade-right"}>
+                                {location.pathname.includes("/qavo-codes") ? <>LAYİHƏ TİPİ</> : <>ƏMƏKDAŞLIQ</>}
+                            </div>
                             <span data-aos={"fade-right"}>{project?.role}</span>
 
                             <div className={"span span1 span2"} data-aos={"fade-right"}
                                  onClick={() => window.location.href = `${project?.vebSiteLink}`}>
-                                [<Title title={"WEBSAYTA KEÇİN"}/>]
+                                [<Title title={"LİNKƏ KEÇİD EDİN"}/>]
                             </div>
                         </div>
                     </div>

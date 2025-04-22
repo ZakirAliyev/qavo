@@ -8,7 +8,10 @@ function AdminLeftBar() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const isOrdersSelected = location.pathname === '/cp/dashboard/orders';
+    const isPortfolioSelected = location.pathname === '/cp/dashboard/portfolio';
+    const isAgencyPortfolioSelected = location.pathname === '/cp/dashboard/agency-portfolio';
+    const isAcademyPortfolioSelected = location.pathname === '/cp/dashboard/academy-portfolio';
+    const isTeamMemberSelected = location.pathname === '/cp/dashboard/team-member';
 
     return (
         <section id={"adminLeftBar"}>
@@ -18,25 +21,32 @@ function AdminLeftBar() {
                 </div>
                 <div className={"routeWrapper"}>
                     <div
-                        className={`route ${isOrdersSelected ? 'selected' : ''}`}
+                        className={`route ${isPortfolioSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/portfolio')}
                     >
                         <FaBorderAll/>
                         <span>Qavo Codes</span>
                     </div>
                     <div
-                        className={`route ${isOrdersSelected ? 'selected' : ''}`}
+                        className={`route ${isAgencyPortfolioSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/agency-portfolio')}
                     >
                         <FaBorderAll/>
                         <span>Qavo Agency</span>
                     </div>
                     <div
-                        className={`route ${isOrdersSelected ? 'selected' : ''}`}
+                        className={`route ${isAcademyPortfolioSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/academy-portfolio')}
                     >
                         <FaBorderAll/>
                         <span>Qavo Academy</span>
+                    </div>
+                    <div
+                        className={`route ${isTeamMemberSelected ? 'selected' : ''}`}
+                        onClick={() => navigate('/cp/dashboard/team-member')}
+                    >
+                        <FaBorderAll/>
+                        <span>Team member</span>
                     </div>
                 </div>
             </div>
