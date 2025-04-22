@@ -4,19 +4,16 @@ import { PORTFOLIO_CARD_IMAGE_URL } from "../../../constants.js";
 
 function MainImagePortfolioDetails({ project }) {
     const [containerHeight, setContainerHeight] = useState("200vh");
-
-    // DOM referansları
     const imageWrapperRef = useRef(null);
     const overlayRef = useRef(null);
     const overlay1Ref = useRef(null);
-
     const maxScroll = 1000;
 
     useEffect(() => {
-        let ticking = false;
+        let animationFrameId;
         const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
+            if (!animationFrameId) {
+                animationFrameId = window.requestAnimationFrame(() => {
                     const viewportHeight = window.innerHeight;
                     const scrollY = window.scrollY;
                     let percentage, imageOffset, overlayPosition;
@@ -37,7 +34,6 @@ function MainImagePortfolioDetails({ project }) {
                         }
                     }
 
-                    // Doğrudan DOM güncellemeleri:
                     if (imageWrapperRef.current) {
                         imageWrapperRef.current.style.transform = `translateY(${imageOffset}px)`;
                     }
@@ -48,17 +44,20 @@ function MainImagePortfolioDetails({ project }) {
                     if (overlay1Ref.current) {
                         overlay1Ref.current.style.position = overlayPosition;
                     }
-                    ticking = false;
+                    animationFrameId = null;
                 });
-                ticking = true;
             }
         };
 
         window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
+        };
     }, []);
 
-    // Container yüksekliğini ekran genişliğine göre ayarla.
     useEffect(() => {
         const handleResize = () => {
             setContainerHeight(window.innerWidth < 400 ? "250vh" : "200vh");
@@ -70,6 +69,15 @@ function MainImagePortfolioDetails({ project }) {
     }, []);
 
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     return (
         <div style={{ height: containerHeight }}>
@@ -87,6 +95,7 @@ function MainImagePortfolioDetails({ project }) {
                                 PORTFOLIO_CARD_IMAGE_URL + project?.cardImage
                             )}
                             alt="Image"
+                            loading="lazy"
                         />
                         <div className="bottomFade"></div>
                     </div>
