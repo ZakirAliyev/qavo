@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation
 import "./index.scss";
-import Title from "../Title/index.jsx";
 import Title1 from "../Title1/index.jsx";
 
 function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
@@ -8,10 +8,12 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
     const [hoveredIndex, setHoveredIndex] = useState(null);
     const [computedFontSize, setComputedFontSize] = useState("125px");
 
-    // Font size'ı pencere genişliğine göre hesaplayalım
+    const navigate = useNavigate();
+    const location = useLocation(); // Get current location
+
+    // Font size calculation based on window width
     const updateFontSize = () => {
         const currentWidth = window.innerWidth;
-        // iPhone 14 Pro Max benzeri küçük ekranlarda (örneğin, 430px'e kadar) 100px kullan
         if (currentWidth <= 400) {
             setComputedFontSize("80px");
             return;
@@ -20,19 +22,16 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
             setComputedFontSize("100px");
             return;
         }
-        const baseWidth = 1920;    // Referans ekran genişliği
-        const baseFontSize = 125;  // Referans font size
+        const baseWidth = 1920;
+        const baseFontSize = 125;
         let scale = currentWidth / baseWidth;
         let newSize = baseFontSize * scale;
-        // Minimum font size değeri belirleyelim
         if (newSize < 80) newSize = 80;
         setComputedFontSize(`${newSize}px`);
     };
 
     useEffect(() => {
-        // İlk renderda hesaplama
         updateFontSize();
-        // Pencere yeniden boyutlandırıldığında güncelle
         window.addEventListener("resize", updateFontSize);
         return () => window.removeEventListener("resize", updateFontSize);
     }, []);
@@ -44,7 +43,18 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
         return () => clearTimeout(timer);
     }, []);
 
-    const titles = ["PORTFOLİO", "HAQQIMIZDA", "ƏLAQƏ"];
+    const titles = [
+        { text: "QAVO CODES", path: "/portfolio/qavo-codes" },
+        { text: "QAVO AGENCY", path: "/portfolio/qavo-agency" },
+        { text: "QAVO ACADEMY", path: "/portfolio/qavo-academy" },
+        { text: "BİZİM KOMANDA", path: "/our-team" },
+        { text: "ƏLAQƏ", path: "/contact" },
+    ];
+
+    const handleNavigation = (path) => {
+        navigate(path);
+        onClose(); // Close the burger menu after navigation
+    };
 
     return (
         <section
@@ -58,18 +68,20 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
         >
             {showWave && (
                 <div className="wave-text">
-                    {titles.map((title, index) => (
+                    {titles.map((item, index) => (
                         <p
-                            key={title}
+                            key={item.text}
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
+                            onClick={() => handleNavigation(item.path)}
+                            style={{ cursor: "pointer" }}
                         >
                             <Title1
-                                title={title}
+                                title={item.text}
                                 fontSize={computedFontSize}
                                 fontFamily={"'Credit Block', sans-serif"}
                                 color={hoveredIndex === index ? "white" : "#555"}
-                                selected={index === 0}
+                                selected={location.pathname === item.path} // Set selected based on current path
                             />
                         </p>
                     ))}

@@ -26,7 +26,7 @@ function MainImagePortfolioDetails({ project }) {
                         overlayPosition = "fixed";
                         if (scrollY < viewportHeight + maxScroll) {
                             const effectiveScroll = scrollY - viewportHeight;
-                            percentage = 35 + (effectiveScroll / maxScroll) * (100 - 35);
+                            percentage = 35 + (effectiveScroll / maxScroll) * (65);
                             imageOffset = effectiveScroll;
                         } else {
                             percentage = 100;
@@ -79,6 +79,11 @@ function MainImagePortfolioDetails({ project }) {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    useEffect(() => {
+        const img = new Image();
+        img.src = windowWidth < 992 ? PORTFOLIO_CARD_IMAGE_URL + project?.mobileCardImage : PORTFOLIO_CARD_IMAGE_URL + project?.cardImage;
+    }, [windowWidth, project]);
+
     return (
         <div style={{ height: containerHeight }}>
             <div className="blur-div">
@@ -109,8 +114,7 @@ function MainImagePortfolioDetails({ project }) {
                             width: "100%",
                             height: "100vh",
                             pointerEvents: "none",
-                            transition: "background 0.5s ease-in-out",
-                            willChange: "background",
+                            willChange: "position"
                         }}
                     ></div>
                     <div
@@ -120,8 +124,7 @@ function MainImagePortfolioDetails({ project }) {
                             top: 0,
                             left: 0,
                             width: "100%",
-                            transition: "background 0.5s ease-in-out",
-                            willChange: "background",
+                            willChange: "background, position"
                         }}
                     ></div>
                 </section>

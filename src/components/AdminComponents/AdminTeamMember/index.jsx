@@ -94,7 +94,7 @@ function AdminTeamMember() {
         try {
             const orderInfo = updatedTeamMembers.map((member, index) => ({
                 id: member.id,
-                orderId: index + 1,
+                orderId: (index + 1).toString(),
             }));
 
             const response = await postReOrderTeamMember(orderInfo).unwrap();

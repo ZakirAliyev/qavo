@@ -1,0 +1,83 @@
+#letsTalk {
+  color: white;
+  margin: 100px 16px;
+  .text {
+    color: white;
+    text-align: center;
+    font-size: 150px;
+    font-family: 'Credit Block', sans-serif;
+  }
+
+  .error {
+    color: #ac9ae8;
+    font-weight: 500;
+    margin-top: 5px;
+  }
+
+  .box {
+    padding: 0 32px 0 0;
+  }
+
+  .box1 {
+    padding: 0 0 0 32px;
+  }
+
+  .iki {
+    margin-top: 100px;
+  }
+
+
+  input, textarea {
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    width: 100%;
+    padding: 0 0 16px 0;
+    outline: none;
+    resize: none;
+    font-size: 18px;
+
+    &::placeholder {
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  textarea {
+    padding: 2px;
+  }
+
+  .buttonWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px 0 0 0;
+
+    button {
+      background: transparent;
+      border: 2px solid white;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 18px;
+      height: 60px;
+      width: 180px;
+    }
+  }
+
+  @media screen and (max-width: 992px){
+    .box {
+      padding: 0;
+    }
+
+    .box1 {
+      padding: 0;
+      margin-top: 50px;
+    }
+
+    .diki {
+      margin: 50px 0;
+    }
+  }
+}

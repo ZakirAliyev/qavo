@@ -1,18 +1,18 @@
 import './index.scss';
 import { Table, Button, message, Modal, Form, Input, Upload, Select } from 'antd';
-import { FiTrash, FiEdit } from "react-icons/fi";
+import { FiTrash, FiEdit } from 'react-icons/fi';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { PORTFOLIO_CARD_IMAGE_URL, PORTFOLIO_IMAGE_URL } from '../../../constants.js';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
+import update from 'immutability-helper';
 import {
     useDeleteProjectMutation,
     useGetAllProjectsOfAcademyQuery,
     usePostProjectsMutation,
     usePostReOrderProjectMutation,
-    usePostUpdateProjectMutation
-} from "../../../services/userApi.jsx";
-import { PORTFOLIO_CARD_IMAGE_URL } from "../../../constants.js";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDrag, useDrop } from 'react-dnd';
-import update from 'immutability-helper';
+    usePostUpdateProjectMutation,
+} from '../../../services/userApi.jsx';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -68,8 +68,9 @@ function AdminPortfolioAcademy() {
     const [postReOrderProject] = usePostReOrderProjectMutation();
     const [postUpdateProject] = usePostUpdateProjectMutation();
     const [deleteProject] = useDeleteProjectMutation();
+    const [deletedImageNames, setDeletedImageNames] = useState([]);
+    const [isSaving, setIsSaving] = useState(false);
 
-    // Fayl dəyərlərini normallaşdıran funksiya
     const normFile = (e) => {
         if (Array.isArray(e)) {
             return e;
@@ -77,33 +78,32 @@ function AdminPortfolioAcademy() {
         return e && e.fileList;
     };
 
-    // Layihə məlumatlarını yükləyirik
     useEffect(() => {
         if (getAllProjectsOfAcademy?.data) {
             setProjects(getAllProjectsOfAcademy.data);
         }
     }, [getAllProjectsOfAcademy]);
 
-    // Sıralamanın yenilənməsi
-    const handleReOrder = useCallback(async (projects) => {
-        try {
-            const orderInfo = projects.map((project, index) => ({
-                id: project.id,
-                orderId: index + 1
-            }));
-
-            const response = await postReOrderProject(orderInfo).unwrap();
-
-            if (response?.statusCode === 200) {
-                message.success('Sıralama başarıyla güncellendi!');
-            } else {
+    const handleReOrder = useCallback(
+        async (projects) => {
+            try {
+                const orderInfo = projects.map((project, index) => ({
+                    id: project.id,
+                    orderId: index + 1,
+                }));
+                const response = await postReOrderProject(orderInfo).unwrap();
+                if (response?.statusCode === 200) {
+                    message.success('Sıralama başarıyla güncellendi!');
+                } else {
+                    message.error('Sıralama güncellenirken hata oluştu');
+                }
+            } catch (error) {
+                console.error('Re-order error:', error);
                 message.error('Sıralama güncellenirken hata oluştu');
             }
-        } catch (error) {
-            console.error('Re-order error:', error);
-            message.error('Sıralama güncellenirken hata oluştu');
-        }
-    }, [postReOrderProject]);
+        },
+        [postReOrderProject]
+    );
 
     const moveRow = useCallback(
         async (dragIndex, hoverIndex) => {
@@ -114,7 +114,6 @@ function AdminPortfolioAcademy() {
                     [hoverIndex, 0, dragRow],
                 ],
             });
-
             setProjects(newProjects);
             await handleReOrder(newProjects);
         },
@@ -122,6 +121,7 @@ function AdminPortfolioAcademy() {
     );
 
     const getImageUrl = (filename) => `${PORTFOLIO_CARD_IMAGE_URL}${filename}`;
+    const getImageUrl1 = (filename) => `${PORTFOLIO_IMAGE_URL}${filename}`;
 
     const expandedRowRender = (record) => (
         <div className="project-details">
@@ -134,7 +134,6 @@ function AdminPortfolioAcademy() {
         </div>
     );
 
-    // Delete funksiyası: Seçilmiş layihəni backend-dən silir
     const handleDelete = async (id) => {
         try {
             await deleteProject(id).unwrap();
@@ -146,9 +145,9 @@ function AdminPortfolioAcademy() {
         }
     };
 
-    // Redaktə modalını açmaq üçün funksiya
     const showEditModal = (project) => {
         setEditingProject(project);
+        setDeletedImageNames([]);
         form.setFieldsValue({
             title: project.title,
             titleEng: project.titleEng,
@@ -162,130 +161,142 @@ function AdminPortfolioAcademy() {
             roleEng: project.roleEng,
             roleRu: project.roleRu,
             team: project.team,
-            mainImagePC: project.cardImage ? [{
-                uid: '-1',
-                name: project.cardImage.split('/').pop(),
-                status: 'done',
-                url: getImageUrl(project.cardImage),
-            }] : [],
-            mainImageMobile: project.mobileCardImage ? [{
-                uid: '-1',
-                name: project.mobileCardImage.split('/').pop(),
-                status: 'done',
-                url: getImageUrl(project.mobileCardImage),
-            }] : [],
-            images: []
+            academyMainMentor: project.academyMainMentor,
+            academyAssiantMentor: project.academyAssiantMentor,
+            academyDurationOfCourse: project.academyDurationOfCourse,
+            academyCourseSchedule: project.academyCourseSchedule,
+            mainImagePC: project.cardImage
+                ? [
+                    {
+                        uid: '-1',
+                        name: project.cardImage.split('/').pop(),
+                        status: 'done',
+                        url: getImageUrl(project.cardImage),
+                    },
+                ]
+                : [],
+            mainImageMobile: project.mobileCardImage
+                ? [
+                    {
+                        uid: '-2',
+                        name: project.mobileCardImage.split('/').pop(),
+                        status: 'done',
+                        url: getImageUrl(project.mobileCardImage),
+                    },
+                ]
+                : [],
+            images: project.images
+                ? project.images.map((img, idx) => ({
+                    uid: `img-${idx}`,
+                    name: img.split('/').pop(),
+                    status: 'done',
+                    url: getImageUrl1(img),
+                }))
+                : [],
         });
         setIsModalVisible(true);
     };
 
-    // Yeni layihə əlavə etmək üçün modalı açan funksiya
     const showPostModal = () => {
         setEditingProject(null);
+        setDeletedImageNames([]);
         form.resetFields();
         setIsModalVisible(true);
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
+        setDeletedImageNames([]);
         form.resetFields();
     };
 
+    const handleRemove = (file, fieldName) => {
+        if (file.url && file.name && fieldName === 'images') {
+            setDeletedImageNames((prev) => [...prev, file.name]);
+        }
+    };
+
     const handleSave = async () => {
+        setIsSaving(true);
         try {
             const values = await form.validateFields();
-            if (editingProject) {
-                // Update əməliyyatı üçün FormData yaradılır
-                const formData = new FormData();
-                formData.append('id', editingProject.id);
-                formData.append('title', values.title);
-                formData.append('titleEng', values.titleEng);
-                formData.append('titleRu', values.titleRu);
-                formData.append('subTitle', values.subTitle);
-                formData.append('subTitleEng', values.subTitleEng);
-                formData.append('subTitleRu', values.subTitleRu);
-                formData.append('productionDate', values.productionDate);
-                formData.append('vebSiteLink', values.vebSiteLink);
-                if (values.mainImagePC && values.mainImagePC[0]) {
-                    if (values.mainImagePC[0].originFileObj) {
-                        formData.append('cardImage', values.mainImagePC[0].originFileObj);
-                    } else {
-                        formData.append('cardImage', values.mainImagePC[0].url);
-                    }
+            const formData = new FormData();
+
+            // Append all fields
+            formData.append('title', values.title || '');
+            formData.append('titleEng', values.titleEng || '');
+            formData.append('titleRu', values.titleRu || '');
+            formData.append('subTitle', values.subTitle || '');
+            formData.append('subTitleEng', values.subTitleEng || '');
+            formData.append('subTitleRu', values.subTitleRu || '');
+            formData.append('productionDate', values.productionDate || '');
+            formData.append('vebSiteLink', values.vebSiteLink || '');
+            formData.append('role', values.role || '');
+            formData.append('roleEng', values.roleEng || '');
+            formData.append('roleRu', values.roleRu || '');
+            formData.append('team', values.team ? values.team.toLowerCase() : '');
+            formData.append('academyMainMentor', values.academyMainMentor || '');
+            formData.append('academyAssiantMentor', values.academyAssiantMentor || '');
+            formData.append('academyDurationOfCourse', values.academyDurationOfCourse || '');
+            formData.append('academyCourseSchedule', values.academyCourseSchedule || '');
+
+            // Handle cardImage
+            if (values.mainImagePC && values.mainImagePC[0]) {
+                if (values.mainImagePC[0].originFileObj) {
+                    formData.append('cardImage', values.mainImagePC[0].originFileObj);
                 } else {
-                    formData.append('cardImage', '');
+                    formData.append('cardImage', values.mainImagePC[0].name || '');
                 }
-                if (values.mainImageMobile && values.mainImageMobile[0]) {
-                    if (values.mainImageMobile[0].originFileObj) {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].originFileObj);
-                    } else {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].url);
-                    }
+            } else {
+                formData.append('cardImage', '');
+            }
+
+            // Handle mobileCardImage
+            if (values.mainImageMobile && values.mainImageMobile[0]) {
+                if (values.mainImageMobile[0].originFileObj) {
+                    formData.append('mobileCardImage', values.mainImageMobile[0].originFileObj);
                 } else {
-                    formData.append('mobileCardImage', '');
+                    formData.append('mobileCardImage', values.mainImageMobile[0].name || '');
                 }
-                formData.append('role', values.role);
-                formData.append('roleEng', values.roleEng);
-                formData.append('roleRu', values.roleRu);
-                if (values.images && values.images.length > 0) {
-                    values.images.forEach((file) => {
+            } else {
+                formData.append('mobileCardImage', '');
+            }
+
+            // Handle images
+            if (values.images && values.images.length > 0) {
+                values.images.forEach((file) => {
+                    if (file.originFileObj) {
                         formData.append('images', file.originFileObj);
-                    });
-                }
-                formData.append('team', values.team ? values.team.toLowerCase() : '');
+                    }
+                });
+            }
+
+            // Append deleted image names
+            deletedImageNames.forEach((name) => {
+                formData.append('deleteImageNames', name);
+            });
+
+            if (editingProject) {
+                formData.append('id', editingProject.id);
                 await postUpdateProject(formData).unwrap();
                 message.success('Proje başarıyla güncellendi');
             } else {
-                // Yeni layihə əlavə edərkən, FormData yaradılır
-                const formData = new FormData();
-                formData.append('title', values.title);
-                formData.append('titleEng', values.titleEng);
-                formData.append('titleRu', values.titleRu);
-                formData.append('subTitle', values.subTitle);
-                formData.append('subTitleEng', values.subTitleEng);
-                formData.append('subTitleRu', values.subTitleRu);
-                formData.append('productionDate', values.productionDate);
-                formData.append('vebSiteLink', values.vebSiteLink);
-                if (values.mainImagePC && values.mainImagePC[0]) {
-                    if (values.mainImagePC[0].originFileObj) {
-                        formData.append('cardImage', values.mainImagePC[0].originFileObj);
-                    } else {
-                        formData.append('cardImage', values.mainImagePC[0].url);
-                    }
-                } else {
-                    formData.append('cardImage', '');
-                }
-                if (values.mainImageMobile && values.mainImageMobile[0]) {
-                    if (values.mainImageMobile[0].originFileObj) {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].originFileObj);
-                    } else {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].url);
-                    }
-                } else {
-                    formData.append('mobileCardImage', '');
-                }
-                formData.append('role', values.role);
-                formData.append('roleEng', values.roleEng);
-                formData.append('roleRu', values.roleRu);
-                if (values.images && values.images.length > 0) {
-                    values.images.forEach((file) => {
-                        formData.append('images', file.originFileObj);
-                    });
-                }
-                formData.append('team', values.team ? values.team.toLowerCase() : '');
                 await postProjects(formData).unwrap();
                 message.success('Yeni proje başarıyla əlavə edildi');
             }
+
             refetch();
             setIsModalVisible(false);
+            setDeletedImageNames([]);
         } catch (error) {
             console.error('Failed to save:', error);
             message.error('Proje işlənərkən xəta baş verdi');
+        } finally {
+            setIsSaving(false);
         }
     };
 
     const handleUploadChange = (info) => {
-        // Auto-upload söndürülü olduğundan, fayl seçildikdə sadəcə məlumat veririk
         if (info.file.status === 'done' || info.file.status === 'error') {
             message.info(`${info.file.name} seçildi`);
         }
@@ -328,14 +339,39 @@ function AdminPortfolioAcademy() {
             ),
         },
         {
+            title: 'Əlavə Şəkillər',
+            dataIndex: 'images',
+            key: 'images',
+            render: (images) => (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {images && images.length > 0 ? (
+                        images.map((img, idx) => {
+                            const isWebm = img.toLowerCase().endsWith('.webm');
+                            console.log(img)
+                            return isWebm ? (
+                                <span key={idx} style={{ width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '5px', background: '#f0f0f0' }}>
+                        VIDEO
+                    </span>
+                            ) : (
+                                <img
+                                    key={idx}
+                                    src={getImageUrl1(img)}
+                                    alt={`Thumbnail ${idx}`}
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }}
+                                />
+                            );
+                        })
+                    ) : (
+                        <span>Şəkil yoxdur</span>
+                    )}
+                </div>
+            )
+        },
+        {
             title: 'Başlıq',
             dataIndex: 'title',
             key: 'title',
-            render: (text) => (
-                <div style={{ color: '#0c0c0c', fontWeight: '500' }}>
-                    {text}
-                </div>
-            ),
+            render: (text) => <div style={{ color: '#0c0c0c', fontWeight: '500' }}>{text}</div>,
         },
         { title: 'Tarix', dataIndex: 'productionDate', key: 'productionDate' },
         { title: 'Rol', dataIndex: 'role', key: 'role' },
@@ -354,24 +390,15 @@ function AdminPortfolioAcademy() {
             key: 'actions',
             render: (_, record) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button
-                        type="primary"
-                        icon={<FiEdit />}
-                        onClick={() => showEditModal(record)}
-                    />
-                    <Button
-                        type="danger"
-                        icon={<FiTrash />}
-                        onClick={() => handleDelete(record.id)}
-                    />
+                    <Button type="primary" icon={<FiEdit />} onClick={() => showEditModal(record)} />
+                    <Button type="danger" icon={<FiTrash />} onClick={() => handleDelete(record.id)} />
                 </div>
             ),
         },
     ];
 
     return (
-        <section id="adminPortfolioCodes">
-            {/* + düyməsi vasitəsilə yeni layihə əlavə etmək */}
+        <section id="adminPortfolioAcademy">
             <div style={{ marginBottom: '16px', textAlign: 'right' }}>
                 <Button type="primary" icon={<PlusOutlined />} onClick={showPostModal}>
                     Yeni Proje
@@ -395,61 +422,60 @@ function AdminPortfolioAcademy() {
             />
 
             <Modal
-                title={editingProject ? "Projeni Düzənlə" : "Yeni Proje"}
+                title={editingProject ? 'Projeni Düzənlə' : 'Yeni Proje'}
                 visible={isModalVisible}
                 onCancel={handleCancel}
                 footer={[
-                    <Button key="back" onClick={handleCancel}>
+                    <Button key="back" onClick={handleCancel} disabled={isSaving}>
                         Ləğv et
                     </Button>,
-                    <Button key="submit" type="primary" onClick={handleSave}>
-                        {editingProject ? "Yadda Saxla" : "Əlavə et"}
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={handleSave}
+                        loading={isSaving}
+                        disabled={isSaving}
+                    >
+                        {editingProject ? 'Yadda Saxla' : 'Əlavə et'}
                     </Button>,
                 ]}
-                width={800}
+                width={1320}
                 destroyOnClose
             >
                 <Form form={form} layout="vertical">
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         {/* Column 1 */}
                         <div>
-                            <Form.Item name="title" label="Başlıq (AZ)">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="titleEng" label="Başlıq (EN)">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="titleRu" label="Başlıq (RU)">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="subTitle" label="Alt başlıq (AZ)">
-                                <TextArea rows={3} />
-                            </Form.Item>
-                            <Form.Item name="subTitleEng" label="Alt başlıq (EN)">
-                                <TextArea rows={3} />
-                            </Form.Item>
-                            <Form.Item name="subTitleRu" label="Alt başlıq (RU)">
-                                <TextArea rows={3} />
-                            </Form.Item>
-                        </div>
-
-                        {/* Column 2 */}
-                        <div>
-                            <Form.Item name="productionDate" label="İstehsal tarixi">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="vebSiteLink" label="Veb sayt linki">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="role" label="Rol (AZ)">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="roleEng" label="Rol (EN)">
-                                <Input />
-                            </Form.Item>
-                            <Form.Item name="roleRu" label="Rol (RU)">
-                                <Input />
-                            </Form.Item>
+                            <div style={{ display: 'flex', gap: '16px' }}>
+                                <div style={{ width: '100%' }}>
+                                    <Form.Item name="title" label="Başlıq (AZ)">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item name="titleEng" label="Başlıq (EN)">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item name="titleRu" label="Başlıq (RU)">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item name="productionDate" label="İstehsal tarixi">
+                                        <Input />
+                                    </Form.Item>
+                                </div>
+                                <div style={{ width: '100%' }}>
+                                    <Form.Item name="role" label="Layihə (AZ)">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item name="roleEng" label="Layihə (EN)">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item name="roleRu" label="Layihə (RU)">
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item name="vebSiteLink" label="Veb sayt linki">
+                                        <Input />
+                                    </Form.Item>
+                                </div>
+                            </div>
                             <Form.Item name="team" label="Team">
                                 <Select placeholder="Seçin">
                                     <Option value="academy">academy</Option>
@@ -457,35 +483,70 @@ function AdminPortfolioAcademy() {
                                     <Option value="agency">agency</Option>
                                 </Select>
                             </Form.Item>
-                            <Form.Item
-                                name="mainImagePC"
-                                label="Əsas şəkil (PC)"
-                                valuePropName="fileList"
-                                getValueFromEvent={normFile}
-                            >
-                                <Upload
-                                    name="image"
-                                    listType="picture-card"
-                                    beforeUpload={() => false}
-                                    onChange={handleUploadChange}
-                                >
-                                    <Button icon={<UploadOutlined />}>Yüklə</Button>
-                                </Upload>
+                            <Form.Item name="academyMainMentor" label="Əsas Mentor">
+                                <Input />
                             </Form.Item>
-                            <Form.Item
-                                name="mainImageMobile"
-                                label="Əsas şəkil (MOBİL)"
-                                valuePropName="fileList"
-                                getValueFromEvent={normFile}
-                            >
-                                <Upload
-                                    name="image"
-                                    listType="picture-card"
-                                    beforeUpload={() => false}
-                                    onChange={handleUploadChange}
-                                >
-                                    <Button icon={<UploadOutlined />}>Yüklə</Button>
-                                </Upload>
+                            <Form.Item name="academyAssiantMentor" label="Köməkçi Mentor">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="academyDurationOfCourse" label="Kursun Müddəti">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="academyCourseSchedule" label="Kursun Cədvəli">
+                                <Input />
+                            </Form.Item>
+                            <div style={{ display: 'flex', gap: '16px' }}>
+                                <div style={{ width: '100%' }}>
+                                    <Form.Item
+                                        name="mainImagePC"
+                                        label="Əsas şəkil (PC)"
+                                        valuePropName="fileList"
+                                        getValueFromEvent={normFile}
+                                    >
+                                        <Upload
+                                            name="image"
+                                            listType="picture-card"
+                                            beforeUpload={() => false}
+                                            onChange={handleUploadChange}
+                                            onRemove={(file) => handleRemove(file, 'mainImagePC')}
+                                            maxCount={1}
+                                        >
+                                            <Button icon={<UploadOutlined />}>Yüklə</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                </div>
+                                <div style={{ width: '100%' }}>
+                                    <Form.Item
+                                        name="mainImageMobile"
+                                        label="Əsas şəkil (MOBİL)"
+                                        valuePropName="fileList"
+                                        getValueFromEvent={normFile}
+                                    >
+                                        <Upload
+                                            name="image"
+                                            listType="picture-card"
+                                            beforeUpload={() => false}
+                                            onChange={handleUploadChange}
+                                            onRemove={(file) => handleRemove(file, 'mainImageMobile')}
+                                            maxCount={1}
+                                        >
+                                            <Button icon={<UploadOutlined />}>Yüklə</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Column 2 */}
+                        <div>
+                            <Form.Item name="subTitle" label="Alt başlıq (AZ)">
+                                <TextArea rows={4} />
+                            </Form.Item>
+                            <Form.Item name="subTitleEng" label="Alt başlıq (EN)">
+                                <TextArea rows={4} />
+                            </Form.Item>
+                            <Form.Item name="subTitleRu" label="Alt başlıq (RU)">
+                                <TextArea rows={4} />
                             </Form.Item>
                             <Form.Item
                                 name="images"
@@ -498,6 +559,13 @@ function AdminPortfolioAcademy() {
                                     listType="picture-card"
                                     multiple
                                     beforeUpload={() => false}
+                                    onChange={handleUploadChange}
+                                    onRemove={(file) => handleRemove(file, 'images')}
+                                    itemRender={(originNode, file) => {
+                                        const fileName = file.name || '';
+                                        const extension = fileName.split('.').pop().toLowerCase();
+                                        return originNode;
+                                    }}
                                 >
                                     <Button icon={<UploadOutlined />}>Yüklə</Button>
                                 </Upload>

@@ -1,9 +1,9 @@
 import './index.scss';
-import {useEffect, useState, useRef} from 'react';
+import { useEffect, useState, useRef } from 'react';
 import image1 from '/src/assets/qavoCodes.png';
-import image2 from '/src/assets/qavoAcademy.png';
-import image3 from '/src/assets/qavoAgency.png';
-import {useNavigate} from "react-router";
+import image2 from '/src/assets/qavoAgency.png';
+import image3 from '/src/assets/qavoAcademy.png';
+import { useNavigate } from "react-router";
 
 function Folder() {
     const navigate = useNavigate();
@@ -14,21 +14,40 @@ function Folder() {
     const [scrollDirection, setScrollDirection] = useState('down');
     const lastScrollY = useRef(0);
 
-    const [cursorPos, setCursorPos] = useState({x: 0, y: 0});
+    const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
     const [cursorHover, setCursorHover] = useState(false);
+
+    // State to track which images should be blurred
+    const [isBlurred, setIsBlurred] = useState([false, false, false]);
+
+    // Refs to access the DOM elements of each image wrapper
+    const imageRefs = useRef([]);
 
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
+
+            // Existing scroll direction and index logic
             if (currentScrollY > lastScrollY.current) {
                 setScrollDirection('down');
             } else if (currentScrollY < lastScrollY.current) {
                 setScrollDirection('up');
             }
             lastScrollY.current = currentScrollY;
-
             const index = currentScrollY / window.innerHeight;
             setScrollIndex(index);
+
+            // Blur effect logic
+            const middle = window.innerHeight *0.70;
+            const blurred = [
+                // Blur first image if second image's top is above middle
+                imageRefs.current[1]?.getBoundingClientRect().top < middle,
+                // Blur second image if third image's top is above middle
+                imageRefs.current[2]?.getBoundingClientRect().top < middle,
+                // Third image is never blurred
+                false
+            ];
+            setIsBlurred(blurred);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -37,46 +56,28 @@ function Folder() {
 
     useEffect(() => {
         const moveCursor = (e) => {
-            setCursorPos({x: e.clientX, y: e.clientY});
+            setCursorPos({ x: e.clientX, y: e.clientY });
         };
         window.addEventListener("mousemove", moveCursor);
         return () => window.removeEventListener("mousemove", moveCursor);
     }, []);
 
-    const frontIndex = Math.floor(scrollIndex);
-    const progress = scrollIndex - frontIndex;
-
-    const transitionStyle =
-        scrollDirection === 'down'
-            ? 'transform 1s ease, filter .5s ease'
-            : 'transform .3s ease, filter .5s ease';
-
     return (
         <section id="folder">
             {images.map((img, i) => {
-                let scale = 0.8;
-                let blur = 10;
+                // Set scale to 0.6 if blurred, 0.8 if not blurred
+                let scale = isBlurred[i] ? 0.7 : 0.8;
                 let zIndex = 8;
-
-                if (i === frontIndex) {
-                    scale = 0.85;
-                    blur = 0;
-                    zIndex = progress < 0.5 ? 10 : 9;
-                } else if (i === frontIndex + 1) {
-                    scale = 0.85 + 0.15 * progress;
-                    blur = 5 - 5 * progress;
-                    zIndex = progress < 0.5 ? 9 : 10;
-                }
 
                 return (
                     <div
                         key={i}
+                        ref={(el) => (imageRefs.current[i] = el)}
                         className="image-wrapper"
                         style={{
                             zIndex: zIndex,
                             transform: `scale(${scale})`,
-                            filter: `blur(${blur}px)`,
-                            transition: transitionStyle,
+                            filter: isBlurred[i] ? 'blur(10px)' : 'none'
                         }}
                         onMouseEnter={() => setCursorHover(true)}
                         onMouseLeave={() => setCursorHover(false)}
@@ -90,7 +91,7 @@ function Folder() {
                             }
                         }}
                     >
-                        <img src={img} alt={`Image ${i + 1}`}/>
+                        <img src={img} alt={`Image ${i + 1}`} />
                         <div className="overlay">
                             <div className="type">2024</div>
                             <div className="word">{words[i]}</div>
@@ -106,7 +107,7 @@ function Folder() {
 
             <div
                 className={`custom-cursor ${cursorHover ? 'hovered' : ''}`}
-                style={{left: cursorPos.x, top: cursorPos.y}}
+                style={{ left: cursorPos.x, top: cursorPos.y }}
             >
                 {cursorHover && '[ AÇIN ]'}
             </div>

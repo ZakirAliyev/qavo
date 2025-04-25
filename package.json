@@ -35,12 +35,15 @@
     "react-router": "^7.2.0",
     "react-router-dom": "^7.2.0",
     "react-sortable-hoc": "^2.0.0",
+    "react-spinners": "^0.17.0",
+    "react-toastify": "^11.0.5",
     "react-transition-group": "^4.4.5",
     "react-youtube": "^10.1.0",
     "rsuite": "^5.79.0",
     "sass": "^1.86.0",
     "smooth-scrollbar": "^8.8.4",
-    "sweetalert2": "^11.17.2"
+    "sweetalert2": "^11.17.2",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

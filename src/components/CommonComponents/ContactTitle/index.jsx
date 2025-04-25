@@ -2,6 +2,7 @@ import './index.scss';
 import {useEffect, useRef, useState} from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import {useNavigate} from "react-router";
 
 function ContactTitle() {
     const letters = "ƏLAQƏ".split("");
@@ -98,6 +99,9 @@ function ContactTitle() {
         return () => container.removeEventListener("mousemove", handleCursorMove);
     }, []);
 
+
+    const navigate = useNavigate();
+
     return (
         <section id="contactTitle">
             <div className="description" data-aos={"fade-up"}>
@@ -108,6 +112,9 @@ function ContactTitle() {
                 ref={nameContainerRef}
                 onMouseEnter={() => setCursorHover(true)}
                 onMouseLeave={() => setCursorHover(false)}
+                onClick={() => {
+                    navigate('/contact')
+                }}
             >
                 {letters.map((letter, index) => (
                     <span

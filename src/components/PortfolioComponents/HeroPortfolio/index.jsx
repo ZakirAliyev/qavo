@@ -72,9 +72,9 @@ function HeroPortfolio({ portfolioName }) {
                 ))}
             </div>
             <div className="description">
-                BİZ STRATEGİYA, BRENDİNQ ÜZRƏ İXTİSAS EDİLMİŞ YARADICI STUDIYOYUQ <br/>
-                DİZAYN, VƏ İNKİŞAF. İŞİMİZ HƏMİŞƏ MÜKƏMMƏLDİR <br/>
-                DİZAYN VƏ TEXNOLOGİYA.
+                BİZİMLƏ ƏMƏKDAŞLIQ İMKANLARI, SUALLAR VƏ YA TƏKLİFLƏRLƏ BAĞLI ƏLAQƏ SAXLAMAQ <br/>
+                İSTƏDİYİNİZ HƏR AN, PEŞƏKAR KOMANDAMIZ SİZƏ DƏQİQ VƏ DOLĞUN MƏLUMAT TƏQDİM <br/>
+                ETMƏK ÜÇÜN HAZIRDIR VƏ MÜRACİƏTİNİZƏ ƏN QISA ZAMANDA CAVAB VERƏCƏYİK.
             </div>
         </section>
     );

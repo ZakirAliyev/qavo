@@ -1,9 +1,9 @@
 import './index.scss';
 import { Table, Button, message, Modal, Form, Input, Upload, Select } from 'antd';
-import { FiTrash, FiEdit } from "react-icons/fi";
+import { FiTrash, FiEdit } from 'react-icons/fi';
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import {PORTFOLIO_CARD_IMAGE_URL, PORTFOLIO_IMAGE_URL} from "../../../constants.js";
-import React, { useCallback, useEffect, useState } from "react";
+import { PORTFOLIO_CARD_IMAGE_URL, PORTFOLIO_IMAGE_URL } from '../../../constants.js';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import update from 'immutability-helper';
 import {
@@ -11,8 +11,8 @@ import {
     useGetAllProjectsOfCodesQuery,
     usePostProjectsMutation,
     usePostReOrderProjectMutation,
-    usePostUpdateProjectMutation
-} from "../../../services/userApi.jsx";
+    usePostUpdateProjectMutation,
+} from '../../../services/userApi.jsx';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -68,8 +68,10 @@ function AdminPortfolioCodes() {
     const [postReOrderProject] = usePostReOrderProjectMutation();
     const [postUpdateProject] = usePostUpdateProjectMutation();
     const [deleteProject] = useDeleteProjectMutation();
+    const [deletedImageNames, setDeletedImageNames] = useState([]);
+    const [deletedFileNames, setDeletedFileNames] = useState([]);
+    const [isSaving, setIsSaving] = useState(false); // New state for loading
 
-    // Fayl dəyərlərini normallaşdıran funksiya
     const normFile = (e) => {
         if (Array.isArray(e)) {
             return e;
@@ -77,33 +79,32 @@ function AdminPortfolioCodes() {
         return e && e.fileList;
     };
 
-    // Layihə məlumatlarını yükləyirik
     useEffect(() => {
         if (getAllProjectsOfAcademy?.data) {
             setProjects(getAllProjectsOfAcademy.data);
         }
     }, [getAllProjectsOfAcademy]);
 
-    // Sıralamanın yenilənməsi
-    const handleReOrder = useCallback(async (projects) => {
-        try {
-            const orderInfo = projects.map((project, index) => ({
-                id: project.id,
-                orderId: index + 1
-            }));
-
-            const response = await postReOrderProject(orderInfo).unwrap();
-
-            if (response?.statusCode === 200) {
-                message.success('Sıralama başarıyla güncellendi!');
-            } else {
+    const handleReOrder = useCallback(
+        async (projects) => {
+            try {
+                const orderInfo = projects.map((project, index) => ({
+                    id: project.id,
+                    orderId: index + 1,
+                }));
+                const response = await postReOrderProject(orderInfo).unwrap();
+                if (response?.statusCode === 200) {
+                    message.success('Sıralama başarıyla güncellendi!');
+                } else {
+                    message.error('Sıralama güncellenirken hata oluştu');
+                }
+            } catch (error) {
+                console.error('Re-order error:', error);
                 message.error('Sıralama güncellenirken hata oluştu');
             }
-        } catch (error) {
-            console.error('Re-order error:', error);
-            message.error('Sıralama güncellenirken hata oluştu');
-        }
-    }, [postReOrderProject]);
+        },
+        [postReOrderProject]
+    );
 
     const moveRow = useCallback(
         async (dragIndex, hoverIndex) => {
@@ -114,7 +115,6 @@ function AdminPortfolioCodes() {
                     [hoverIndex, 0, dragRow],
                 ],
             });
-
             setProjects(newProjects);
             await handleReOrder(newProjects);
         },
@@ -135,7 +135,6 @@ function AdminPortfolioCodes() {
         </div>
     );
 
-    // Delete funksiyası: Seçilmiş layihəni backend-dən silir
     const handleDelete = async (id) => {
         try {
             await deleteProject(id).unwrap();
@@ -147,9 +146,10 @@ function AdminPortfolioCodes() {
         }
     };
 
-    // Redaktə modalını açmaq üçün funksiya
     const showEditModal = (project) => {
         setEditingProject(project);
+        setDeletedImageNames([]);
+        setDeletedFileNames([]);
         form.setFieldsValue({
             title: project.title,
             titleEng: project.titleEng,
@@ -163,134 +163,165 @@ function AdminPortfolioCodes() {
             roleEng: project.roleEng,
             roleRu: project.roleRu,
             team: project.team,
-            mainImagePC: project.cardImage ? [{
-                uid: '-1',
-                name: project.cardImage.split('/').pop(),
-                status: 'done',
-                url: getImageUrl(project.cardImage),
-            }] : [],
-            mainImageMobile: project.mobileCardImage ? [{
-                uid: '-1',
-                name: project.mobileCardImage.split('/').pop(),
-                status: 'done',
-                url: getImageUrl(project.mobileCardImage),
-            }] : [],
-            images: project.images ? project.images.map((img) => ({
-                uid: img,
-                name: img.split('/').pop(),
-                status: 'done',
-                url: getImageUrl1(img),
-            })) : []
+            academyMainMentor: project.academyMainMentor,
+            academyAssiantMentor: project.academyAssiantMentor,
+            academyDurationOfCourse: project.academyDurationOfCourse,
+            academyCourseSchedule: project.academyCourseSchedule,
+            mainImagePC: project.cardImage
+                ? [
+                    {
+                        uid: '-1',
+                        name: project.cardImage.split('/').pop(),
+                        status: 'done',
+                        url: getImageUrl(project.cardImage),
+                    },
+                ]
+                : [],
+            mainImageMobile: project.mobileCardImage
+                ? [
+                    {
+                        uid: '-2',
+                        name: project.mobileCardImage.split('/').pop(),
+                        status: 'done',
+                        url: getImageUrl(project.mobileCardImage),
+                    },
+                ]
+                : [],
+            images: project.images
+                ? project.images.map((img, idx) => ({
+                    uid: `img-${idx}`,
+                    name: img.split('/').pop(),
+                    status: 'done',
+                    url: getImageUrl1(img),
+                }))
+                : [],
+            files: project.files
+                ? project.files.map((file, idx) => ({
+                    uid: `file-${idx}`,
+                    name: file.split('/').pop(),
+                    status: 'done',
+                    url: file,
+                }))
+                : [],
         });
         setIsModalVisible(true);
     };
 
-    // Yeni layihə əlavə etmək üçün modalı açan funksiya
     const showPostModal = () => {
         setEditingProject(null);
+        setDeletedImageNames([]);
+        setDeletedFileNames([]);
         form.resetFields();
         setIsModalVisible(true);
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
+        setDeletedImageNames([]);
+        setDeletedFileNames([]);
         form.resetFields();
     };
 
+    const handleRemove = (file, fieldName) => {
+        if (file.url && file.name) {
+            if (fieldName === 'images') {
+                setDeletedImageNames((prev) => [...prev, file.name]);
+            } else if (fieldName === 'files') {
+                setDeletedFileNames((prev) => [...prev, file.name]);
+            }
+        }
+    };
+
     const handleSave = async () => {
+        setIsSaving(true); // Start loading
         try {
             const values = await form.validateFields();
+            const formData = new FormData();
+
+            // Append all fields
+            formData.append('title', values.title || '');
+            formData.append('titleEng', values.titleEng || '');
+            formData.append('titleRu', values.titleRu || '');
+            formData.append('subTitle', values.subTitle || '');
+            formData.append('subTitleEng', values.subTitleEng || '');
+            formData.append('subTitleRu', values.subTitleRu || '');
+            formData.append('productionDate', values.productionDate || '');
+            formData.append('vebSiteLink', values.vebSiteLink || '');
+            formData.append('role', values.role || '');
+            formData.append('roleEng', values.roleEng || '');
+            formData.append('roleRu', values.roleRu || '');
+            formData.append('team', values.team ? values.team.toLowerCase() : '');
+            formData.append('academyMainMentor', values.academyMainMentor || '');
+            formData.append('academyAssiantMentor', values.academyAssiantMentor || '');
+            formData.append('academyDurationOfCourse', values.academyDurationOfCourse || '');
+            formData.append('academyCourseSchedule', values.academyCourseSchedule || '');
+
+            // Handle cardImage
+            if (values.mainImagePC && values.mainImagePC[0]) {
+                if (values.mainImagePC[0].originFileObj) {
+                    formData.append('cardImage', values.mainImagePC[0].originFileObj);
+                } else {
+                    formData.append('cardImage', values.mainImagePC[0].name || '');
+                }
+            } else {
+                formData.append('cardImage', '');
+            }
+
+            // Handle mobileCardImage
+            if (values.mainImageMobile && values.mainImageMobile[0]) {
+                if (values.mainImageMobile[0].originFileObj) {
+                    formData.append('mobileCardImage', values.mainImageMobile[0].originFileObj);
+                } else {
+                    formData.append('mobileCardImage', values.mainImageMobile[0].name || '');
+                }
+            } else {
+                formData.append('mobileCardImage', '');
+            }
+
+            // Handle images
+            if (values.images && values.images.length > 0) {
+                values.images.forEach((file) => {
+                    if (file.originFileObj) {
+                        formData.append('images', file.originFileObj);
+                    }
+                });
+            }
+
+            // Handle files
+            if (values.files && values.files.length > 0) {
+                values.files.forEach((file) => {
+                    if (file.originFileObj) {
+                        formData.append('files', file.originFileObj);
+                    }
+                });
+            }
+
+            // Append deleted image and file names
+            deletedImageNames.forEach((name) => {
+                formData.append('deleteImageNames', name);
+            });
+            deletedFileNames.forEach((name) => {
+                formData.append('deleteFileNames', name);
+            });
+
             if (editingProject) {
-                // Update əməliyyatı üçün FormData yaradılır
-                const formData = new FormData();
                 formData.append('id', editingProject.id);
-                formData.append('title', values.title);
-                formData.append('titleEng', values.titleEng);
-                formData.append('titleRu', values.titleRu);
-                formData.append('subTitle', values.subTitle);
-                formData.append('subTitleEng', values.subTitleEng);
-                formData.append('subTitleRu', values.subTitleRu);
-                formData.append('productionDate', values.productionDate);
-                formData.append('vebSiteLink', values.vebSiteLink);
-                if (values.mainImagePC && values.mainImagePC[0]) {
-                    if (values.mainImagePC[0].originFileObj) {
-                        formData.append('cardImage', values.mainImagePC[0].originFileObj);
-                    } else {
-                        formData.append('cardImage', values.mainImagePC[0].url);
-                    }
-                } else {
-                    formData.append('cardImage', '');
-                }
-                if (values.mainImageMobile && values.mainImageMobile[0]) {
-                    if (values.mainImageMobile[0].originFileObj) {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].originFileObj);
-                    } else {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].url);
-                    }
-                } else {
-                    formData.append('mobileCardImage', '');
-                }
-                formData.append('role', values.role);
-                formData.append('roleEng', values.roleEng);
-                formData.append('roleRu', values.roleRu);
-                if (values.images && values.images.length > 0) {
-                    values.images.forEach((file) => {
-                        if (file.originFileObj) {
-                            formData.append('images', file.originFileObj);
-                        }
-                    });
-                }
-                formData.append('team', values.team ? values.team.toLowerCase() : '');
                 await postUpdateProject(formData).unwrap();
                 message.success('Proje başarıyla güncellendi');
             } else {
-                // Yeni layihə əlavə edərkən, FormData yaradılır
-                const formData = new FormData();
-                formData.append('title', values.title);
-                formData.append('titleEng', values.titleEng);
-                formData.append('titleRu', values.titleRu);
-                formData.append('subTitle', values.subTitle);
-                formData.append('subTitleEng', values.subTitleEng);
-                formData.append('subTitleRu', values.subTitleRu);
-                formData.append('productionDate', values.productionDate);
-                formData.append('vebSiteLink', values.vebSiteLink);
-                if (values.mainImagePC && values.mainImagePC[0]) {
-                    if (values.mainImagePC[0].originFileObj) {
-                        formData.append('cardImage', values.mainImagePC[0].originFileObj);
-                    } else {
-                        formData.append('cardImage', values.mainImagePC[0].url);
-                    }
-                } else {
-                    formData.append('cardImage', '');
-                }
-                if (values.mainImageMobile && values.mainImageMobile[0]) {
-                    if (values.mainImageMobile[0].originFileObj) {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].originFileObj);
-                    } else {
-                        formData.append('mobileCardImage', values.mainImageMobile[0].url);
-                    }
-                } else {
-                    formData.append('mobileCardImage', '');
-                }
-                formData.append('role', values.role);
-                formData.append('roleEng', values.roleEng);
-                formData.append('roleRu', values.roleRu);
-                if (values.images && values.images.length > 0) {
-                    values.images.forEach((file) => {
-                        if (file.originFileObj) {
-                            formData.append('images', file.originFileObj);
-                        }
-                    });
-                }
-                formData.append('team', values.team ? values.team.toLowerCase() : '');
                 await postProjects(formData).unwrap();
                 message.success('Yeni proje başarıyla əlavə edildi');
             }
+
             refetch();
             setIsModalVisible(false);
+            setDeletedImageNames([]);
+            setDeletedFileNames([]);
         } catch (error) {
             console.error('Failed to save:', error);
             message.error('Proje işlənərkən xəta baş verdi');
+        } finally {
+            setIsSaving(false); // Stop loading
         }
     };
 
@@ -337,14 +368,39 @@ function AdminPortfolioCodes() {
             ),
         },
         {
+            title: 'Əlavə Şəkillər',
+            dataIndex: 'images',
+            key: 'images',
+            render: (images) => (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {images && images.length > 0 ? (
+                        images.map((img, idx) => {
+                            const isWebm = img.toLowerCase().endsWith('.webm');
+                            console.log(img)
+                            return isWebm ? (
+                                <span key={idx} style={{ width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '5px', background: '#f0f0f0' }}>
+                        VIDEO
+                    </span>
+                            ) : (
+                                <img
+                                    key={idx}
+                                    src={getImageUrl1(img)}
+                                    alt={`Thumbnail ${idx}`}
+                                    style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' }}
+                                />
+                            );
+                        })
+                    ) : (
+                        <span>Şəkil yoxdur</span>
+                    )}
+                </div>
+            )
+        },
+        {
             title: 'Başlıq',
             dataIndex: 'title',
             key: 'title',
-            render: (text) => (
-                <div style={{ color: '#0c0c0c', fontWeight: '500' }}>
-                    {text}
-                </div>
-            ),
+            render: (text) => <div style={{ color: '#0c0c0c', fontWeight: '500' }}>{text}</div>,
         },
         { title: 'Tarix', dataIndex: 'productionDate', key: 'productionDate' },
         { title: 'Rol', dataIndex: 'role', key: 'role' },
@@ -363,16 +419,8 @@ function AdminPortfolioCodes() {
             key: 'actions',
             render: (_, record) => (
                 <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button
-                        type="primary"
-                        icon={<FiEdit />}
-                        onClick={() => showEditModal(record)}
-                    />
-                    <Button
-                        type="danger"
-                        icon={<FiTrash />}
-                        onClick={() => handleDelete(record.id)}
-                    />
+                    <Button type="primary" icon={<FiEdit />} onClick={() => showEditModal(record)} />
+                    <Button type="danger" icon={<FiTrash />} onClick={() => handleDelete(record.id)} />
                 </div>
             ),
         },
@@ -405,15 +453,21 @@ function AdminPortfolioCodes() {
             </div>
 
             <Modal
-                title={editingProject ? "Projeni Düzənlə" : "Yeni Proje"}
+                title={editingProject ? 'Projeni Düzənlə' : 'Yeni Proje'}
                 visible={isModalVisible}
                 onCancel={handleCancel}
                 footer={[
-                    <Button key="back" onClick={handleCancel}>
+                    <Button key="back" onClick={handleCancel} disabled={isSaving}>
                         Ləğv et
                     </Button>,
-                    <Button key="submit" type="primary" onClick={handleSave}>
-                        {editingProject ? "Yadda Saxla" : "Əlavə et"}
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={handleSave}
+                        loading={isSaving}
+                        disabled={isSaving}
+                    >
+                        {editingProject ? 'Yadda Saxla' : 'Əlavə et'}
                     </Button>,
                 ]}
                 width={1320}
@@ -460,6 +514,18 @@ function AdminPortfolioCodes() {
                                     <Option value="agency">agency</Option>
                                 </Select>
                             </Form.Item>
+                            <Form.Item name="academyMainMentor" label="Əsas Mentor">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="academyAssiantMentor" label="Köməkçi Mentor">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="academyDurationOfCourse" label="Kursun Müddəti">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item name="academyCourseSchedule" label="Kursun Cədvəli">
+                                <Input />
+                            </Form.Item>
                             <div style={{ display: 'flex', gap: '16px' }}>
                                 <div style={{ width: '100%' }}>
                                     <Form.Item
@@ -473,6 +539,7 @@ function AdminPortfolioCodes() {
                                             listType="picture-card"
                                             beforeUpload={() => false}
                                             onChange={handleUploadChange}
+                                            onRemove={(file) => handleRemove(file, 'mainImagePC')}
                                             maxCount={1}
                                         >
                                             <Button icon={<UploadOutlined />}>Yüklə</Button>
@@ -491,6 +558,7 @@ function AdminPortfolioCodes() {
                                             listType="picture-card"
                                             beforeUpload={() => false}
                                             onChange={handleUploadChange}
+                                            onRemove={(file) => handleRemove(file, 'mainImageMobile')}
                                             maxCount={1}
                                         >
                                             <Button icon={<UploadOutlined />}>Yüklə</Button>
@@ -523,25 +591,31 @@ function AdminPortfolioCodes() {
                                     multiple
                                     beforeUpload={() => false}
                                     onChange={handleUploadChange}
+                                    onRemove={(file) => handleRemove(file, 'images')}
                                     itemRender={(originNode, file) => {
                                         const fileName = file.name || '';
                                         const extension = fileName.split('.').pop().toLowerCase();
-                                        if (extension === 'webm') {
-                                            return (
-                                                <video
-                                                    controls
-                                                    width={80}
-                                                    height={80}
-                                                    src={file.url || (file.originFileObj && URL.createObjectURL(file.originFileObj))}
-                                                />
-                                            );
-                                        }
                                         return originNode;
                                     }}
                                 >
-                                    {((form.getFieldValue('images') || []).length === 0) && (
-                                        <Button icon={<UploadOutlined />}>Yüklə</Button>
-                                    )}
+                                    <Button icon={<UploadOutlined />}>Yüklə</Button>
+                                </Upload>
+                            </Form.Item>
+                            <Form.Item
+                                name="files"
+                                label="Fayllar"
+                                valuePropName="fileList"
+                                getValueFromEvent={normFile}
+                            >
+                                <Upload
+                                    name="files"
+                                    listType="text"
+                                    multiple
+                                    beforeUpload={() => false}
+                                    onChange={handleUploadChange}
+                                    onRemove={(file) => handleRemove(file, 'files')}
+                                >
+                                    <Button icon={<UploadOutlined />}>Fayl Yüklə</Button>
                                 </Upload>
                             </Form.Item>
                         </div>

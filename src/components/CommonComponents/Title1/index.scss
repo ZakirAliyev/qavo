@@ -2,9 +2,10 @@
   width: max-content;
   overflow: hidden;
   // Container yüksekliği ve font boyutu için dinamik değer (varsayılan 14px)
-  height: var(--size, 4px);
+  height: 110px;
   color: white;
-  font-size: var(--size, 14px);
+  margin-top: 20px;
+  padding-top: 15px;
 
   .inner {
     transition: transform 0.3s ease;
@@ -31,5 +32,10 @@
       opacity: 1;
       transform: translateY(0);
     }
+  }
+
+  @media screen and (max-width: 992px){
+    margin-top: 0;
+    padding: 0;
   }
 }

@@ -3,7 +3,7 @@
   position: relative;
   padding: 0 80px;
   /* Varsayılan fare imlecini gizleyelim */
-  //cursor: none;
+  // cursor: none;
 
   .custom-cursor {
     position: fixed;
@@ -14,30 +14,23 @@
     /* Başlangıç arka planı */
     background-color: transparent;
     backdrop-filter: blur(0px);
-
     border-radius: 50%;
-    pointer-events: none; // Tıklamayı engellemesin
+    pointer-events: none; /* Tıklamayı engellemesin */
     transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
     justify-content: center;
-
     /* Başlangıçta yazı görünmesin */
     font-size: 0;
     color: white;
-
-    transition: width 0.3s ease,
-    height 0.3s ease,
-    background-color 0.3s ease,
-    backdrop-filter 0.3s ease,
-    font-size 0.3s ease;
+    transition: width 0.7s ease, height 0.7s ease, background-color 0.7s ease,
+    backdrop-filter 0.7s ease, font-size 0.7s ease;
   }
 
   .custom-cursor.hovered {
     /* Hover’da boyutu büyüt */
     width: 125px;
     height: 125px;
-
     /* Arka planı biraz saydam yap */
     background-color: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(10px);
@@ -54,7 +47,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: none; // hide system cursor only when hovering the image
+    cursor: none; /* hide system cursor only when hovering the image */
+    /* Add 0.5s transition for transform and filter */
+    transition: transform 0.7s ease, filter 0.7s ease;
   }
 
   .image-wrapper img {

@@ -22,7 +22,13 @@ function FolderPortfolio({ portfolioName }) {
 
     const [isAnimating, setIsAnimating] = useState(false);
 
-    // Pencere genişliğini takip etmek için state ekleyelim
+    // State to track which images should be blurred
+    const [isBlurred, setIsBlurred] = useState([]);
+
+    // Refs to access the DOM elements of each image wrapper
+    const imageRefs = useRef([]);
+
+    // Pencere genişliğini takip etmek için state
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     useEffect(() => {
@@ -35,6 +41,12 @@ function FolderPortfolio({ portfolioName }) {
     }, []);
 
     useEffect(() => {
+        // Initialize isBlurred array based on filteredPortfolio length
+        setIsBlurred(new Array(filteredPortfolio.length).fill(false));
+        imageRefs.current = new Array(filteredPortfolio.length).fill(null);
+    }, [filteredPortfolio.length]);
+
+    useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
             if (currentScrollY > lastScrollY.current) {
@@ -45,11 +57,23 @@ function FolderPortfolio({ portfolioName }) {
             lastScrollY.current = currentScrollY;
             const index = currentScrollY / window.innerHeight;
             setScrollIndex(index);
+
+            // Blur effect logic
+            const middle = window.innerHeight / 2;
+            const blurred = filteredPortfolio.map((_, i) => {
+                if (i === filteredPortfolio.length - 1) {
+                    // Last image is never blurred
+                    return false;
+                }
+                // Blur image if the next image's top is above the middle
+                return imageRefs.current[i + 1]?.getBoundingClientRect().top < middle;
+            });
+            setIsBlurred(blurred);
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [filteredPortfolio]);
 
     useEffect(() => {
         const moveCursor = (e) => {
@@ -61,11 +85,6 @@ function FolderPortfolio({ portfolioName }) {
 
     const frontIndex = Math.floor(scrollIndex);
     const progress = scrollIndex - frontIndex;
-
-    const transitionStyle =
-        scrollDirection === 'down'
-            ? 'transform 1s ease, filter .5s ease'
-            : 'transform .3s ease, filter .5s ease';
 
     const handleNavigate = (path) => {
         setIsAnimating(true);
@@ -93,20 +112,16 @@ function FolderPortfolio({ portfolioName }) {
             <section id="folderPortfolio" style={{ height: `${sectionHeight}vh` }}>
                 {filteredPortfolio.map((item, i) => {
                     let scale = 0.8;
-                    let blur = 10;
+                    let blur = 0;
                     let zIndex = 8;
 
-                    if (i === frontIndex) {
-                        scale = 0.85;
-                        blur = 0;
-                        zIndex = progress < 0.5 ? 10 : 9;
-                    } else if (i === frontIndex + 1) {
-                        scale = 0.85 + 0.15 * progress;
-                        blur = 5 - 5 * progress;
-                        zIndex = progress < 0.5 ? 9 : 10;
+                    if (isBlurred[i]) {
+                        // Apply blur and reduce scale to 0.6
+                        scale = 0.7;
+                        blur = 10;
+                        zIndex = 8;
                     }
-
-                    // Eğer pencere genişliği 992 pikselden küçükse mobileCardImage, aksi halde cardImage kullanılıyor.
+                    // Use mobileCardImage for < 992px, cardImage otherwise
                     const imageSrc = windowWidth < 992
                         ? PORTFOLIO_CARD_IMAGE_URL + item.mobileCardImage
                         : PORTFOLIO_CARD_IMAGE_URL + item.cardImage;
@@ -114,12 +129,12 @@ function FolderPortfolio({ portfolioName }) {
                     return (
                         <div
                             key={item.id}
+                            ref={(el) => (imageRefs.current[i] = el)}
                             className="image-wrapper"
                             style={{
                                 zIndex: zIndex,
                                 transform: `scale(${scale})`,
                                 filter: `blur(${blur}px)`,
-                                transition: transitionStyle,
                             }}
                             onMouseEnter={() => setCursorHover(true)}
                             onMouseLeave={() => setCursorHover(false)}

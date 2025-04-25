@@ -20,7 +20,7 @@ function Information() {
                         </Link>
                         <div className={"secondary"}>Email</div>
                     </div>
-                    <div className={"box box3 col-4 col-md-6 col-sm-6 col-xs-6"} data-aos={"fade-right"}>
+                    <div className={"box col-4 col-md-6 col-sm-6 col-xs-6"} data-aos={"fade-right"}>
                         <FaPhone className={"icon"}/>
                         <Link to={"tel:0123456789"}>
                             <div className={"main"} style={{
@@ -34,7 +34,7 @@ function Information() {
                         </Link>
                         <div className={"secondary"}>Əlaqə nömrəsi</div>
                     </div>
-                    <div className={"box col-4 col-md-6 col-sm-6 col-xs-6"} data-aos={"fade-up"}>
+                    <div className={"box box3 col-4 col-md-6 col-sm-6 col-xs-6"} data-aos={"fade-up"}>
                         <FaLocationDot className={"icon"}/>
                         <Link
                             to={"https://maps.app.goo.gl/Cp6x9zNTsgv9Zjt5A"}>

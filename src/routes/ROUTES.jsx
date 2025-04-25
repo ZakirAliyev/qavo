@@ -5,7 +5,8 @@ import PortfolioDetailsPage from "../pages/PortfolioDetailsPage/index.jsx";
 import AdminLogin from "../components/AdminComponents/AdminLogin/index.jsx";
 import AdminPage from "../pages/AdminPage/index.jsx";
 import OurTeamPage from "../pages/OurTeamPage/index.jsx";
-import ErrorPage from "../pages/ErrorPage/index.jsx"; // ErrorPage komponentini import edirik
+import ErrorPage from "../pages/ErrorPage/index.jsx";
+import ContactPage from "../pages/ContactPage/index.jsx"; // ErrorPage komponentini import edirik
 
 export const ROUTES = [
     {
@@ -27,6 +28,10 @@ export const ROUTES = [
             {
                 path: 'our-team',
                 element: <OurTeamPage/>,
+            },
+            {
+                path: 'contact',
+                element: <ContactPage/>,
             },
             {
                 path: 'cp',
