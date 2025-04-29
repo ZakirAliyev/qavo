@@ -1,24 +1,19 @@
 #myTitle1 {
   width: max-content;
   overflow: hidden;
-  // Container yüksekliği ve font boyutu için dinamik değer (varsayılan 14px)
-  height: 110px;
-  color: white;
-  margin-top: 20px;
-  padding-top: 15px;
+  color: #555;
+  transition: all .4s ease;
+  position: relative;
+
+  &:hover {
+    color: white;
+  }
 
   .inner {
     transition: transform 0.3s ease;
   }
 
-  // Hover durumunda, translateY değeri de dinamik hesaplanıyor
-  &:hover .inner {
-    transform: translateY(calc(-1 * var(--size, 14px)));
-  }
-
   .inner div {
-    height: var(--size, 14px);
-    line-height: var(--size, 14px);
     text-align: center;
     animation: wave 1.5s ease-out forwards;
   }
@@ -34,7 +29,7 @@
     }
   }
 
-  @media screen and (max-width: 992px){
+  @media screen and (max-width: 992px) {
     margin-top: 0;
     padding: 0;
   }

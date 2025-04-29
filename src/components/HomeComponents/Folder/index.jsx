@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 
 function Folder() {
     const navigate = useNavigate();
-    const images = [image1, image2, image3];
+    const images = [image1, image3, image2];
     const words = ["QAVO CODES", "QAVO AGENCY", "QAVO ACADEMY"];
 
     const [scrollIndex, setScrollIndex] = useState(0);

@@ -22,12 +22,12 @@ function Information() {
                     </div>
                     <div className={"box col-4 col-md-6 col-sm-6 col-xs-6"} data-aos={"fade-right"}>
                         <FaPhone className={"icon"}/>
-                        <Link to={"tel:0123456789"}>
+                        <Link to={"tel:+994102655990"}>
                             <div className={"main"} style={{
                                 fontSize: '14px'
                             }}>+994 (10) 265 59 90</div>
                         </Link>
-                        <Link to={"tel:0123456789"}>
+                        <Link to={"tel:+994102655992"}>
                             <div className={"main"} style={{
                                 fontSize: '14px'
                             }}>+994 (10) 265 59 92</div>

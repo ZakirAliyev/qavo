@@ -10,6 +10,7 @@ import Information from "../../components/CommonComponents/Information/index.jsx
 import OurTeamTitle from "../../components/CommonComponents/OurTeamTitle/index.jsx";
 import AccordionMenu from "../../components/CommonComponents/AccordionMenu/index.jsx";
 import AnimatedCursor from "react-animated-cursor";
+import {useNavigate} from "react-router-dom";
 
 function PortfolioPage() {
     const [, setDisplay] = useState(true);
@@ -17,6 +18,14 @@ function PortfolioPage() {
     const [isBurgerClosing, setIsBurgerClosing] = useState(false);
     const params = useParams();
     const portfolioName = params?.name
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const allowedNames = ["qavo-codes", "qavo-agency", "qavo-academy"];
+        if (portfolioName && !allowedNames.includes(portfolioName)) {
+            navigate('/error');
+        }
+    }, [portfolioName, navigate]);
 
     useEffect(() => {
         const timer = setTimeout(() => {

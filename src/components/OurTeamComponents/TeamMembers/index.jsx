@@ -45,7 +45,7 @@ function TeamMembers() {
                     <div className="wrapper">
                         <div className="type">{item?.sinceYear}-ci ildən</div>
                         <div className={`name ${isDesktop && hoveredIndex !== null && hoveredIndex !== index ? "gray" : ""}`}>
-                            {item?.fullNameEng}
+                            {item?.fullName}
                         </div>
                         <div className="type">{item?.position}</div>
                     </div>

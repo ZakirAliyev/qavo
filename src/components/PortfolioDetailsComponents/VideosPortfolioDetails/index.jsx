@@ -61,7 +61,6 @@ function VideosPortfolioDetails({project}) {
             {videos && videos.length > 0 && (
                 <>
                     <div className="title" data-aos="fade-right">Videolar</div>
-                    <div className="description" data-aos="fade-up">HAZIRLADIĞIMIZ VİDEO TİPLİ KONTENTLƏR</div>
                     <div className="row">
                         {videos.map((video, index) => (
                             <div

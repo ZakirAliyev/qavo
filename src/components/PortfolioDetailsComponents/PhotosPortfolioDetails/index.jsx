@@ -2,9 +2,9 @@ import "./index.scss";
 import { useEffect, useState } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import {PORTFOLIO_IMAGE_URL} from "../../../constants.js";
+import { PORTFOLIO_IMAGE_URL } from "../../../constants.js";
 import { Image } from 'antd';
-import {useLocation} from "react-router";
+import { useLocation } from "react-router";
 
 function PhotosPortfolioDetails({ project }) {
     const [isAnimating, setIsAnimating] = useState(false);
@@ -29,12 +29,16 @@ function PhotosPortfolioDetails({ project }) {
             id="photosPortfolioDetails"
             className={isAnimating ? "animating" : ""}
         >
-            <div className="title" data-aos="fade-right">
-                {location.pathname.includes("/qavo-codes") ? <>ŞƏKİLLƏR</> : <>POSTLAR</>}
-            </div>
-            <div className="description" data-aos="fade-up">
-                {location.pathname.includes("/qavo-codes") ? <>WEB-SATYDAN ÖRNƏK ŞƏKİLLƏR</> : <>HAZIRLADIĞIMIZ ŞƏKİL TİPLİ KONTENTLƏR</>}
-            </div>
+            {images.length > 0 && (
+                <>
+                    <div className="title" data-aos="fade-right">
+                        {location.pathname.includes("/qavo-codes") ? <>ŞƏKİLLƏR</> : <>POSTLAR</>}
+                    </div>
+                    <div className="description" data-aos="fade-up">
+                        {location.pathname.includes("/qavo-codes") ? <>WEB-SATYDAN ÖRNƏK ŞƏKİLLƏR</> : <></>}
+                    </div>
+                </>
+            )}
             <div className="row">
                 {images.map((img, index) => (
                     <div

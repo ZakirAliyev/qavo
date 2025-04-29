@@ -7,7 +7,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 995;
+  z-index: 985;
   animation: slideDown 0.5s ease-out forwards;
 
   &.closing {
@@ -16,6 +16,7 @@
 
   .wave-text {
     position: absolute;
+    z-index: 999;
     top: 50%;
     width: 100%;
     text-align: center;
@@ -27,7 +28,7 @@
       opacity: 0;
       animation: wave 0.2s ease-out forwards;
       font-family: "Credit Block", sans-serif;
-      line-height: 1.4;
+      line-height: 1.05;
       display: flex;
       align-items: center;
       justify-content: center;

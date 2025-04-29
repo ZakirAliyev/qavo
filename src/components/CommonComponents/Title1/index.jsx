@@ -7,17 +7,8 @@ function Title1({title, fontSize, fontFamily, color, selected}) {
     const actualColor = (selected ? 'white' : color)
 
     return (
-        <section id="myTitle1" style={{'--size': '120px'}}>
+        <section id="myTitle1">
             <div className="inner">
-                <div
-                    style={{
-                        fontSize: size,
-                        fontFamily: family,
-                        color: actualColor
-                    }}
-                >
-                    {title}
-                </div>
                 <div
                     style={{
                         fontSize: size,

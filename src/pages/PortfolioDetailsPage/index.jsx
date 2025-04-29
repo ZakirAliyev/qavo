@@ -13,6 +13,8 @@ import PhotosPortfolioDetails from "../../components/PortfolioDetailsComponents/
 import ContactTitle from "../../components/CommonComponents/ContactTitle/index.jsx";
 import Footer from "../../components/CommonComponents/Footer/index.jsx";
 import AnimatedCursor from "react-animated-cursor";
+import { useNavigate } from "react-router-dom";
+
 
 function PortfolioDetailsPage() {
     const [, setDisplay] = useState(true);
@@ -22,8 +24,17 @@ function PortfolioDetailsPage() {
     const params = useParams();
     const id = params?.id;
 
-    const {data: getProjectById} = useGetProjectByIdQuery(id)
+    const { data: getProjectById, error, isLoading } = useGetProjectByIdQuery(id);
     const project = getProjectById?.data
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (error) {
+            navigate("/error", { replace: true });
+        }
+    }, [error, navigate]);
+
 
 
     useEffect(() => {

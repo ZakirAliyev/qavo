@@ -80,7 +80,6 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
                                 title={item.text}
                                 fontSize={computedFontSize}
                                 fontFamily={"'Credit Block', sans-serif"}
-                                color={hoveredIndex === index ? "white" : "#555"}
                                 selected={location.pathname === item.path} // Set selected based on current path
                             />
                         </p>

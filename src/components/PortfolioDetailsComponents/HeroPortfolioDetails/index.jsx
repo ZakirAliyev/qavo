@@ -1,7 +1,5 @@
 import "./index.scss";
 import { useRef, useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { useGetProjectByIdQuery } from "../../../services/userApi.jsx";
 
 function HeroPortfolioDetails({ project }) {
     const letters = project?.title.toUpperCase().split("");

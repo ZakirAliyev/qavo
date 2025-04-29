@@ -14,8 +14,9 @@
     width: 100%;
     aspect-ratio: 16/9;
     object-fit: cover;
-    height: 100vh;
     display: block;
+    height: 125vh;
+    margin-top: 28vh;
   }
 
   // Resmin alt kısmında sabit kalan fade efekti
@@ -38,7 +39,8 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    transition: background 0.5s ease-in-out;
+    will-change: background;
     will-change: background;
   }
 }
+

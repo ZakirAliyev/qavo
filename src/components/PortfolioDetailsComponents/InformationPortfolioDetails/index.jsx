@@ -75,7 +75,6 @@ function InformationPortfolioDetails({project}) {
     }, []);
 
     const location = useLocation();
-    console.log(location.pathname.includes("/qavo-codes"));
 
     return (
         <section id="informationPortfolioDetails">
@@ -105,7 +104,7 @@ function InformationPortfolioDetails({project}) {
                             <div className={"span"} data-aos={"fade-right"}>TARİX</div>
                             <span data-aos={"fade-right"}>Yanvar {project?.productionDate}</span>
                             <div className={"span span1"} data-aos={"fade-right"}>
-                                {location.pathname.includes("/qavo-codes") ? <>LAYİHƏ TİPİ</> : <>ƏMƏKDAŞLIQ</>}
+                                {location.pathname.includes("/qavo-codes") ? <>LAYİHƏ TİPİ</> : <>XİDMƏT SAHƏSİ</>}
                             </div>
                             <span data-aos={"fade-right"}>{project?.role}</span>
 

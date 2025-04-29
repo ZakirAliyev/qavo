@@ -3,40 +3,33 @@ import { useState, useEffect, useRef } from "react";
 import { PORTFOLIO_CARD_IMAGE_URL } from "../../../constants.js";
 
 function MainImagePortfolioDetails({ project }) {
-    const [containerHeight, setContainerHeight] = useState("200vh");
+    const [containerHeight, setContainerHeight] = useState("100vh");
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
     const imageWrapperRef = useRef(null);
     const overlayRef = useRef(null);
     const overlay1Ref = useRef(null);
+
     const maxScroll = 1000;
 
     useEffect(() => {
         let animationFrameId;
+
         const handleScroll = () => {
             if (!animationFrameId) {
                 animationFrameId = window.requestAnimationFrame(() => {
                     const viewportHeight = window.innerHeight;
                     const scrollY = window.scrollY;
-                    let percentage, imageOffset, overlayPosition;
 
-                    if (scrollY < viewportHeight) {
-                        percentage = 35;
-                        imageOffset = 0;
-                        overlayPosition = "absolute";
-                    } else {
+                    let percentage = 0;
+                    let overlayPosition = "absolute";
+
+                    if (scrollY > viewportHeight) {
                         overlayPosition = "fixed";
-                        if (scrollY < viewportHeight + maxScroll) {
-                            const effectiveScroll = scrollY - viewportHeight;
-                            percentage = 35 + (effectiveScroll / maxScroll) * (65);
-                            imageOffset = effectiveScroll;
-                        } else {
-                            percentage = 100;
-                            imageOffset = maxScroll;
-                        }
+                        const effectiveScroll = Math.min(scrollY - viewportHeight, maxScroll);
+                        percentage = (effectiveScroll / maxScroll) * 200;
                     }
 
-                    if (imageWrapperRef.current) {
-                        imageWrapperRef.current.style.transform = `translateY(${imageOffset}px)`;
-                    }
                     if (overlayRef.current) {
                         overlayRef.current.style.background = `radial-gradient(circle at center, transparent ${percentage}%, #0C0C0C ${percentage}%)`;
                         overlayRef.current.style.position = overlayPosition;
@@ -44,12 +37,14 @@ function MainImagePortfolioDetails({ project }) {
                     if (overlay1Ref.current) {
                         overlay1Ref.current.style.position = overlayPosition;
                     }
+
                     animationFrameId = null;
                 });
             }
         };
 
         window.addEventListener("scroll", handleScroll, { passive: true });
+
         return () => {
             window.removeEventListener("scroll", handleScroll);
             if (animationFrameId) {
@@ -60,29 +55,20 @@ function MainImagePortfolioDetails({ project }) {
 
     useEffect(() => {
         const handleResize = () => {
-            setContainerHeight(window.innerWidth < 400 ? "250vh" : "200vh");
+            const width = window.innerWidth;
+            setWindowWidth(width);
+            setContainerHeight(width < 400 ? "150vh" : "100vh");
         };
 
         handleResize();
         window.addEventListener("resize", handleResize);
+
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    useEffect(() => {
-        const img = new Image();
-        img.src = windowWidth < 992 ? PORTFOLIO_CARD_IMAGE_URL + project?.mobileCardImage : PORTFOLIO_CARD_IMAGE_URL + project?.cardImage;
-    }, [windowWidth, project]);
+    const imageUrl = windowWidth < 992
+        ? PORTFOLIO_CARD_IMAGE_URL + project?.mobileCardImage
+        : PORTFOLIO_CARD_IMAGE_URL + project?.cardImage;
 
     return (
         <div style={{ height: containerHeight }}>
@@ -94,39 +80,40 @@ function MainImagePortfolioDetails({ project }) {
                         style={{ willChange: "transform" }}
                     >
                         <img
-                            src={windowWidth < 992 ? (
-                                PORTFOLIO_CARD_IMAGE_URL + project?.mobileCardImage
-                            ) : (
-                                PORTFOLIO_CARD_IMAGE_URL + project?.cardImage
-                            )}
-                            alt="Image"
+                            src={imageUrl}
+                            alt="Project"
                             loading="lazy"
                         />
                         <div className="bottomFade"></div>
                     </div>
+
                     <div
                         className="imgOverlay"
                         ref={overlay1Ref}
                         style={{
                             background: "rgba(0, 0, 0, 0.25)",
+                            position: "absolute",
                             top: 0,
                             left: 0,
                             width: "100%",
                             height: "100vh",
                             pointerEvents: "none",
-                            willChange: "position"
+                            willChange: "position",
                         }}
-                    ></div>
+                    />
+
                     <div
                         className="overlay"
                         ref={overlayRef}
                         style={{
+                            position: "absolute",
                             top: 0,
                             left: 0,
                             width: "100%",
-                            willChange: "background, position"
+                            height: "100vh",
+                            willChange: "background, position",
                         }}
-                    ></div>
+                    />
                 </section>
             </div>
         </div>

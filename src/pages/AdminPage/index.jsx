@@ -1,6 +1,6 @@
 import './index.scss'
 import {useLocation, useNavigate} from "react-router";
-import image2 from "../../assets/qavoCodesLogo.png";
+import image2 from "../../assets/pp.jpg";
 import {FaChevronDown, FaChevronUp} from "react-icons/fa";
 import {useState} from "react";
 import {CiLogout} from "react-icons/ci";

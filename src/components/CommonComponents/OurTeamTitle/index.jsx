@@ -104,7 +104,7 @@ function OurTeamTitle() {
     return (
         <section id="ourTeamTitle">
             <div className="description" data-aos={"fade-up"}>
-                VİZUAL VƏ İNTERAKTİV DİZAYN DÜNYASIMIZI KƏŞF EDİRİK
+                VİZUAL VƏ İNTERAKTİV DİZAYN DÜNYAMIZI KƏŞF EDİRİK
             </div>
             <div
                 className="name"
