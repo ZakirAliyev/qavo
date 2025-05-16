@@ -84,6 +84,11 @@ table, th, td, tr, thead, tbody {
     margin: 0 auto;
 }
 
+.container7 {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
 .row {
     display: flex;
     flex-wrap: wrap;

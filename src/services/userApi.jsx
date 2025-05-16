@@ -108,6 +108,13 @@ export const userApi = createApi({
                 method: 'DELETE',
             }),
         }),
+        postSpinUser: builder.mutation({
+            query: (data) => ({
+                url: `/SpinUsers`,
+                method: 'POST',
+                body: (data),
+            }),
+        }),
     }),
 })
 export const {
@@ -126,4 +133,5 @@ export const {
     useDeleteTeamMemberMutation,
     useReOrderTeamMembersMutation,
     usePostTeamMemberMutation,
+    usePostSpinUserMutation,
 } = userApi

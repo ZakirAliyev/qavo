@@ -6,7 +6,8 @@ import AdminLogin from "../components/AdminComponents/AdminLogin/index.jsx";
 import AdminPage from "../pages/AdminPage/index.jsx";
 import OurTeamPage from "../pages/OurTeamPage/index.jsx";
 import ErrorPage from "../pages/ErrorPage/index.jsx";
-import ContactPage from "../pages/ContactPage/index.jsx"; // ErrorPage komponentini import edirik
+import ContactPage from "../pages/ContactPage/index.jsx";
+import SpinPage from "../pages/SpinPage/index.jsx"; // ErrorPage komponentini import edirik
 
 export const ROUTES = [
     {
@@ -16,6 +17,10 @@ export const ROUTES = [
             {
                 index: true,
                 element: <HomePage/>,
+            },
+            {
+                path: 'spin',
+                element: <SpinPage/>,
             },
             {
                 path: 'portfolio/:name',
@@ -60,7 +65,7 @@ export const ROUTES = [
         ]
     },
     {
-        path: '*', // Bütün uyğun olmayan yollar üçün
+        path: '*',
         element: <ErrorPage/>
     }
 ];
