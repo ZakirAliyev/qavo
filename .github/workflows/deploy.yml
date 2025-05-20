@@ -1,16 +1,16 @@
-name: Deploy React App to Plesk via FTP
+name: Auto Deploy React App to Plesk via FTP
 
 on:
   push:
     branches:
-      - main  # Eğer başka branch kullanıyorsan değiştir
+      - main  # Main branch'a push edildiğinde çalışacak
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
@@ -25,10 +25,13 @@ jobs:
         run: npm run build
 
       - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v3
+        uses: SamKirkland/FTP-Deploy-Action@v4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: build
           server-dir: httpdocs/
+
+      - name: Cleanup old files (optional)
+        run: rm -rf build
