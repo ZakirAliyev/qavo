@@ -10,10 +10,12 @@ import image2 from "/src/assets/spin2.png";
 import Footer from "../../components/CommonComponents/Footer/index.jsx";
 
 const sectors = [
-    {color: '#f82', label: '100%', probability: 0.01},
-    {color: '#0bf', label: '75%', probability: 0.10},
-    {color: '#fb0', label: '55%', probability: 0.30},
-    {color: '#0fb', label: '40%', probability: 0.49},
+    {color: '#938bf1', label: '60%', probability: 0.01},
+    {color: '#7bff00', label: '50%', probability: 0.02},
+    {color: '#bf00ff', label: '40%', probability: 0.3},
+    {color: '#0bf', label: '30%', probability: 0.70},
+    {color: '#ff8800', label: '20%', probability: 0.75},
+    {color: '#ffcc00', label: '15%', probability: 0.85},
 ];
 
 const SpinPage = () => {
@@ -42,9 +44,8 @@ const SpinPage = () => {
     const TAU = 2 * PI;
     const arc = TAU / sectors.length;
 
-    const totalRotations = 10; // 10 full rotations
     const spinDuration = 5000; // 5 seconds total spin time
-    const decelerationDuration = 2000; // 2 seconds for deceleration
+    const singleRotation = TAU; // One full rotation
 
     const drawWheel = (ctx, angle) => {
         ctx.clearRect(0, 0, dia, dia);
@@ -69,16 +70,18 @@ const SpinPage = () => {
     };
 
     const getWeightedSectorIndex = () => {
-        let totalProbability = sectors.reduce((sum, sector) => sum + sector.probability, 0);
-        let random = Math.random() * totalProbability;
+        const totalProbability = sectors.reduce((sum, sector) => sum + sector.probability, 0);
+        const random = Math.random() * totalProbability;
         let cumulative = 0;
+
         for (let i = 0; i < sectors.length; i++) {
             cumulative += sectors[i].probability;
             if (random <= cumulative) {
                 return i;
             }
         }
-        return sectors.length - 1; // Fallback
+        // Fallback to 40% sector (highest probability)
+        return 3; // Index of 40% sector
     };
 
     const easeOutQuad = (t) => 1 - (1 - t) * (1 - t);
@@ -93,19 +96,11 @@ const SpinPage = () => {
 
         // Calculate target angle for the selected sector
         const targetAngle = ((sectors.length - targetIndex) % sectors.length) * arc + PI / 2;
-        const totalRotation = TAU * totalRotations + (targetAngle - (angleRef.current % TAU)) % TAU;
+        // One full rotation plus the angle to reach the target
+        const totalRotation = singleRotation + (targetAngle - (angleRef.current % TAU));
 
-        let currentRotation;
-        if (elapsed < spinDuration - decelerationDuration) {
-            // Constant speed for first part
-            const initialProgress = elapsed / (spinDuration - decelerationDuration);
-            currentRotation = totalRotation * initialProgress;
-        } else {
-            // Deceleration phase
-            const decelProgress = (elapsed - (spinDuration - decelerationDuration)) / decelerationDuration;
-            const easedProgress = easeOutQuad(decelProgress);
-            currentRotation = totalRotation * (1 - (1 - easedProgress) * (spinDuration - decelerationDuration) / spinDuration);
-        }
+        const easedProgress = easeOutQuad(progress);
+        const currentRotation = totalRotation * easedProgress;
 
         angleRef.current = (angleRef.current + currentRotation) % TAU;
         drawWheel(ctx, angleRef.current);
@@ -120,13 +115,13 @@ const SpinPage = () => {
             setCurrentSector(sectors[targetIndex]);
             setIsLoading(true);
 
-            // Send the label of the sector the wheel landed on
+            // Send the correct sector label
             postSpinUser({
                 name: formData.name,
                 surname: formData.surname,
                 email: formData.email,
                 number: formData.number,
-                percent: sectors[targetIndex - 1].label, // Ensure correct sector label is sent
+                percent: sectors[targetIndex].label,
                 lessonName: formData.lessonName
             }).unwrap()
                 .then((response) => {
@@ -134,7 +129,7 @@ const SpinPage = () => {
                     if (response?.statusCode === 201) {
                         Swal.fire({
                             title: 'Təbriklər!',
-                            text: `Təbriklər! Qavo Academy-dən ${sectors[targetIndex - 1].label} endirim şansı qazandınız. Tezliklə sizinlə əlaqə saxlanılacaq!`,
+                            text: `Təbriklər! Qavo Academy-dən ${sectors[targetIndex].label} endirim şansı qazandınız. Tezliklə sizinlə əlaqə saxlanılacaq!`,
                             icon: 'success',
                             confirmButtonText: 'Davam'
                         }).then(() => navigate('/'));
@@ -327,7 +322,7 @@ const SpinPage = () => {
                                 <div className="row">
                                     <div
                                         className={formData.lessonName === 'MARKETİNG DƏRSLƏRİ' ? 'inputRadio selected' : 'inputRadio'}
-                                        onClick={() => handleRadioChange('MARKETİNG DƏRSLƔRİ')}
+                                        onClick={() => handleRadioChange('MARKETİNG DƏRSLƏRİ')}
                                     >
                                         <input
                                             type="radio"
@@ -336,7 +331,7 @@ const SpinPage = () => {
                                             checked={formData.lessonName === 'MARKETİNG DƏRSLƔRİ'}
                                             onChange={() => handleRadioChange('MARKETİNG DƏRSLƔRİ')}
                                         />
-                                        <label>MARKETİNG DƏRSLƏRİ</label>
+                                        <label>MARKETİNG DƏRSLƔRİ</label>
                                     </div>
                                 </div>
                                 <div className="row">
@@ -349,7 +344,7 @@ const SpinPage = () => {
                                             name="lesson"
                                             value="QRAFİK DİZAYN"
                                             checked={formData.lessonName === 'QRAFİK DİZAYN'}
-                                            onChange={() => handleRadioChange('QRAFİK DİZAYN')}
+                                            on novidades={() => handleRadioChange('QRAFİK DİZAYN')}
                                         />
                                         <label>QRAFİK DİZAYN</label>
                                     </div>
@@ -392,15 +387,15 @@ const SpinPage = () => {
                                         className="wheel-pointer"
                                         style={{
                                             position: 'absolute',
-                                            top: '11.5%',
-                                            left: '77.4%',
+                                            top: '79.5%',
+                                            left: '79.5%',
                                             transform: 'translateX(-50%)',
                                             width: '0',
                                             height: '0',
                                             borderLeft: '10px solid transparent',
                                             borderRight: '10px solid transparent',
                                             borderBottom: '20px solid red',
-                                            rotate: '225deg',
+                                            rotate: '-45deg',
                                             zIndex: 10,
                                         }}
                                     />

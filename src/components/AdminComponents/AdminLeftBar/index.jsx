@@ -3,6 +3,11 @@ import image1 from "/src/assets/qavoCodesLogo.png";
 import {useNavigate} from "react-router-dom";
 import {useLocation} from "react-router";
 import {FaBorderAll} from "react-icons/fa";
+import {IoCodeSlash} from "react-icons/io5";
+import {MdSupportAgent} from "react-icons/md";
+import {PiSpinnerBallLight, PiStudent} from "react-icons/pi";
+import {GiTeamIdea} from "react-icons/gi";
+import {AiOutlineTeam} from "react-icons/ai";
 
 function AdminLeftBar() {
     const location = useLocation();
@@ -12,6 +17,7 @@ function AdminLeftBar() {
     const isAgencyPortfolioSelected = location.pathname === '/cp/dashboard/agency-portfolio';
     const isAcademyPortfolioSelected = location.pathname === '/cp/dashboard/academy-portfolio';
     const isTeamMemberSelected = location.pathname === '/cp/dashboard/team-member';
+    const isSpin = location.pathname === '/cp/dashboard/spin';
 
     return (
         <section id={"adminLeftBar"}>
@@ -24,29 +30,36 @@ function AdminLeftBar() {
                         className={`route ${isPortfolioSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/portfolio')}
                     >
-                        <FaBorderAll/>
+                        <IoCodeSlash className={"iconZakir"}/>
                         <span>Qavo Codes</span>
                     </div>
                     <div
                         className={`route ${isAgencyPortfolioSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/agency-portfolio')}
                     >
-                        <FaBorderAll/>
+                        <MdSupportAgent className={"iconZakir"}/>
                         <span>Qavo Agency</span>
                     </div>
                     <div
                         className={`route ${isAcademyPortfolioSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/academy-portfolio')}
                     >
-                        <FaBorderAll/>
+                        <PiStudent className={"iconZakir"}/>
                         <span>Qavo Academy</span>
                     </div>
                     <div
                         className={`route ${isTeamMemberSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/team-member')}
                     >
-                        <FaBorderAll/>
+                        <AiOutlineTeam className={"iconZakir"}/>
                         <span>Team member</span>
+                    </div>
+                    <div
+                        className={`route ${isSpin ? 'selected' : ''}`}
+                        onClick={() => navigate('/cp/dashboard/spin')}
+                    >
+                        <PiSpinnerBallLight className={"iconZakir"}/>
+                        <span>Spin</span>
                     </div>
                 </div>
             </div>

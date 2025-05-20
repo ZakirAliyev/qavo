@@ -1,0 +1,40 @@
+#adminSpin {
+  background-color: #ededed;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  max-height: 95vh;
+  overflow-y: scroll;
+
+  .anar {
+    border: 1px solid #ccc;
+    width: 100px;
+    font-size: 12px;
+    border-radius: 4px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .drop-over-downward {
+    td {
+      border-bottom: 2px dashed #1890ff;
+    }
+  }
+
+  .drop-over-upward {
+    td {
+      border-top: 2px dashed #1890ff;
+    }
+  }
+
+  .ant-table-tbody > tr.drop-over-downward > td {
+    border-bottom: 2px dashed #1890ff;
+  }
+
+  .ant-table-tbody > tr.drop-over-upward > td {
+    border-top: 2px dashed #1890ff;
+  }
+
+}

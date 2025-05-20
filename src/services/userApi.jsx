@@ -75,7 +75,7 @@ export const userApi = createApi({
                 body: (data),
             }),
         }),
-       reOrderTeamMembers: builder.mutation({
+        reOrderTeamMembers: builder.mutation({
             query: (data) => ({
                 url: `/OurTeam/replace-our-team`,
                 method: 'PUT',
@@ -115,6 +115,22 @@ export const userApi = createApi({
                 body: (data),
             }),
         }),
+        getAllSpinUser: builder.query({
+            query: () => ({
+                url: `/SpinUsers`,
+            }),
+        }),
+        editSpinUser: builder.query({
+            query: () => ({
+                url: `/SpinUsers`,
+            }),
+        }),
+        spinMarkAsRead: builder.mutation({
+            query: (id) => ({
+                url: `/SpinUsers?id=${id}`,
+                method: 'PUT',
+            })
+        })
     }),
 })
 export const {
@@ -134,4 +150,6 @@ export const {
     useReOrderTeamMembersMutation,
     usePostTeamMemberMutation,
     usePostSpinUserMutation,
+    useGetAllSpinUserQuery,
+    useSpinMarkAsReadMutation
 } = userApi

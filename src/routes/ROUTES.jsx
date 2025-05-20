@@ -62,6 +62,10 @@ export const ROUTES = [
                 path: 'cp/dashboard/team-member',
                 element: <AdminPage/>,
             },
+            {
+                path: 'cp/dashboard/spin',
+                element: <AdminPage/>,
+            },
         ]
     },
     {
