@@ -24,8 +24,8 @@ jobs:
       - name: Build React project
         run: npm run build
 
-      - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4
+      - name: FTP Deploy  
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
