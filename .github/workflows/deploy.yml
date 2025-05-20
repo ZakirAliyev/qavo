@@ -24,10 +24,10 @@ jobs:
       - name: Build React project
         run: npm run build
 
-      - name: Check if build directory exists
+      - name: Check if dist directory exists
         run: |
-          if [ ! -d "build" ]; then
-            echo "Build directory not found!"; exit 1;
+          if [ ! -d "dist" ]; then
+            echo "Dist directory not found!"; exit 1;
           fi
 
       - name: Deploy to FTP
@@ -36,8 +36,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: build/
+          local-dir: dist/
           server-dir: httpdocs/
 
       - name: Cleanup old files (optional)
-        run: rm -rf build
+        run: rm -rf dist
