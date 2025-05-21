@@ -1,7 +1,7 @@
 import './index.scss';
-import { Table, Button, message } from 'antd';
-import React, { useCallback, useEffect, useState } from "react";
-import { useDrag, useDrop } from 'react-dnd';
+import {Table, Button, message} from 'antd';
+import React, {useCallback, useEffect, useState} from "react";
+import {useDrag, useDrop} from 'react-dnd';
 import update from 'immutability-helper';
 import {
     useGetAllSpinUserQuery,
@@ -14,12 +14,12 @@ const ItemTypes = {
     ROW: 'row',
 };
 
-const DraggableRow = ({ index, moveRow, className, style, ...restProps }) => {
+const DraggableRow = ({index, moveRow, className, style, ...restProps}) => {
     const ref = React.useRef();
-    const [{ isOver, dropClassName }, drop] = useDrop({
+    const [{isOver, dropClassName}, drop] = useDrop({
         accept: ItemTypes.ROW,
         collect: (monitor) => {
-            const { index: dragIndex } = monitor.getItem() || {};
+            const {index: dragIndex} = monitor.getItem() || {};
             if (dragIndex === index) {
                 return {};
             }
@@ -32,9 +32,9 @@ const DraggableRow = ({ index, moveRow, className, style, ...restProps }) => {
             moveRow(item.index, index);
         },
     });
-    const [{ isDragging }, drag] = useDrag({
+    const [{isDragging}, drag] = useDrag({
         type: ItemTypes.ROW,
-        item: { index },
+        item: {index},
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
@@ -45,14 +45,14 @@ const DraggableRow = ({ index, moveRow, className, style, ...restProps }) => {
         <tr
             ref={ref}
             className={`${className} ${isOver ? dropClassName : ''}`}
-            style={{ cursor: 'move', ...style, opacity: isDragging ? 0.5 : 1 }}
+            style={{cursor: 'move', ...style, opacity: isDragging ? 0.5 : 1}}
             {...restProps}
         />
     );
 };
 
 function AdminSpin() {
-    const { data: getAllSpinUsers, refetch, isLoading } = useGetAllSpinUserQuery();
+    const {data: getAllSpinUsers, refetch, isLoading} = useGetAllSpinUserQuery();
     const [spinUsers, setSpinUsers] = useState([]);
     const [postReOrderTeamMember] = useReOrderTeamMembersMutation();
     const [markAsRead] = useSpinMarkAsReadMutation();
@@ -166,7 +166,7 @@ function AdminSpin() {
             dataIndex: 'name',
             key: 'name',
             render: (text) => (
-                <div style={{ color: '#0c0c0c', fontWeight: '500' }}>
+                <div style={{color: '#0c0c0c', fontWeight: '500'}}>
                     {text}
                 </div>
             ),
@@ -205,9 +205,15 @@ function AdminSpin() {
             title: 'Əməliyyatlar',
             key: 'actions',
             render: (_, record) => (
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{display: 'flex', gap: '8px'}}>
                     <button
-                        style={{ backgroundColor: record.isView ? '#e6f7ff' : '#f0f5ff', borderColor: record.isView ? '#91d5ff' : '#adc6ff', color: '#000' }}
+                        style={{
+                            backgroundColor: record.isView ? '#e6f7ff' : '#f0f5ff',
+                            borderColor: record.isView ? '#91d5ff' : '#adc6ff',
+                            color: '#000',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
                         onClick={() => handleMarkAsRead(record.id)}
                         disabled={record.isView}
                         className={"anar"}
@@ -226,7 +232,7 @@ function AdminSpin() {
                 dataSource={spinUsers}
                 rowKey="id"
                 loading={isLoading}
-                pagination={{ pageSize: 10000 }}
+                pagination={{pageSize: 10000}}
                 components={components}
                 onRow={(record, index) => ({
                     index,
@@ -237,7 +243,7 @@ function AdminSpin() {
                     rowExpandable: (record) => !!record.email,
                 }}
             />
-            <ToastContainer />
+            <ToastContainer/>
         </section>
     );
 }
