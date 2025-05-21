@@ -1,5 +1,5 @@
 import './index.scss';
-import {Table, Button, message} from 'antd';
+import {Table, message} from 'antd';
 import React, {useCallback, useEffect, useState} from "react";
 import {useDrag, useDrop} from 'react-dnd';
 import update from 'immutability-helper';
@@ -205,14 +205,16 @@ function AdminSpin() {
             title: 'Əməliyyatlar',
             key: 'actions',
             render: (_, record) => (
-                <div style={{display: 'flex', gap: '8px'}}>
+                <div style={{
+                    display: 'flex', gap: '8px',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
                     <button
                         style={{
                             backgroundColor: record.isView ? '#e6f7ff' : '#f0f5ff',
                             borderColor: record.isView ? '#91d5ff' : '#adc6ff',
-                            color: '#000',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            color: '#000'
                         }}
                         onClick={() => handleMarkAsRead(record.id)}
                         disabled={record.isView}
