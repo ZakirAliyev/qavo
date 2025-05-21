@@ -197,6 +197,11 @@ function AdminSpin() {
             key: 'lessonName',
         },
         {
+            title: 'Tarix',
+            dataIndex: 'createdDate',
+            key: 'createdDate',
+        },
+        {
             title: 'Əməliyyatlar',
             key: 'actions',
             render: (_, record) => (
