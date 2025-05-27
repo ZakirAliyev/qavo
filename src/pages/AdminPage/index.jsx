@@ -12,6 +12,7 @@ import AdminPortfolioAgency from "../../components/AdminComponents/AdminPortfoli
 import AdminPortfolioAcademy from "../../components/AdminComponents/AdminPortfolioAcademy/index.jsx";
 import AdminTeamMember from "../../components/AdminComponents/AdminTeamMember/index.jsx";
 import AdminSpin from "../../components/AdminComponents/AdminSpin/index.jsx";
+import AdminBrands from "../../components/AdminComponents/AdminBrands/index.jsx";
 
 function AdminPage() {
     const location = useLocation();
@@ -59,10 +60,10 @@ function AdminPage() {
                     <AdminPortfolio/>
                 ) : location.pathname === "/cp/dashboard/agency-portfolio" ? (
                     <AdminPortfolioAgency/>
-                ) : location.pathname === "/cp/dashboard/academy-portfolio" ? (
-                    <AdminPortfolioAcademy/>
                 ) : location.pathname === "/cp/dashboard/team-member" ? (
                     <AdminTeamMember/>
+                ) : location.pathname === "/cp/dashboard/brands" ? (
+                    <AdminBrands/>
                 ) : location.pathname === "/cp/dashboard/spin" ? (
                     <AdminSpin/>
                 ) : null}

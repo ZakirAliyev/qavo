@@ -1,0 +1,16 @@
+#adminBrands {
+  background-color: #ededed;
+  padding: 16px;
+  height: 100%;
+  width: 100%;
+  max-height: 95vh;
+  overflow-y: scroll;
+
+  .ant-table-tbody > tr > td {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  img {
+    object-fit: contain !important;
+  }
+}

@@ -2,13 +2,12 @@ import './index.scss';
 import { useEffect, useState, useRef } from 'react';
 import image1 from '/src/assets/qavoCodes.png';
 import image2 from '/src/assets/qavoAgency.png';
-import image3 from '/src/assets/qavoAcademy.png';
 import { useNavigate } from "react-router";
 
 function Folder() {
     const navigate = useNavigate();
-    const images = [image1, image3, image2];
-    const words = ["QAVO CODES", "QAVO AGENCY", "QAVO ACADEMY"];
+    const images = [image1, image2];
+    const words = ["QAVO CODES", "QAVO AGENCY"];
 
     const [scrollIndex, setScrollIndex] = useState(0);
     const [scrollDirection, setScrollDirection] = useState('down');
@@ -86,8 +85,6 @@ function Folder() {
                                 navigate(`/portfolio/qavo-codes`);
                             } else if (i === 1) {
                                 navigate(`/portfolio/qavo-agency`);
-                            } else if (i === 2) {
-                                navigate(`/portfolio/qavo-academy`);
                             }
                         }}
                     >

@@ -56,14 +56,6 @@ function Footer() {
                 ),
                 path: '',
             },
-            {
-                text: (
-                    <>
-                        <FaChevronRight className="chevron-icon icon" /> Qavo Academy <FaChevronLeft className="chevron-icon icon" />
-                    </>
-                ),
-                path: '',
-            },
         ],
         Facebook: [
             {
@@ -78,14 +70,6 @@ function Footer() {
                 text: (
                     <>
                         <FaChevronRight className="chevron-icon icon" /> Qavo Agency <FaChevronLeft className="chevron-icon icon" />
-                    </>
-                ),
-                path: '',
-            },
-            {
-                text: (
-                    <>
-                        <FaChevronRight className="chevron-icon icon" /> Qavo Academy <FaChevronLeft className="chevron-icon icon" />
                     </>
                 ),
                 path: '',
@@ -108,14 +92,6 @@ function Footer() {
                 ),
                 path: '',
             },
-            {
-                text: (
-                    <>
-                        <FaChevronRight className="chevron-icon icon" /> Qavo Academy <FaChevronLeft className="chevron-icon icon" />
-                    </>
-                ),
-                path: '',
-            },
         ],
         TikTok: [
             {
@@ -134,14 +110,6 @@ function Footer() {
                 ),
                 path: '',
             },
-            {
-                text: (
-                    <>
-                        <FaChevronRight className="chevron-icon icon" /> Qavo Academy <FaChevronLeft className="chevron-icon icon" />
-                    </>
-                ),
-                path: '',
-            },
         ],
         LinkedIn: [
             {
@@ -156,14 +124,6 @@ function Footer() {
                 text: (
                     <>
                         <FaChevronRight className="chevron-icon icon" /> Qavo Agency <FaChevronLeft className="chevron-icon icon" />
-                    </>
-                ),
-                path: '',
-            },
-            {
-                text: (
-                    <>
-                        <FaChevronRight className="chevron-icon icon" /> Qavo Academy <FaChevronLeft className="chevron-icon icon" />
                     </>
                 ),
                 path: '',

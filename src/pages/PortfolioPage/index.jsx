@@ -21,7 +21,7 @@ function PortfolioPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const allowedNames = ["qavo-codes", "qavo-agency", "qavo-academy"];
+        const allowedNames = ["qavo-codes", "qavo-agency"];
         if (portfolioName && !allowedNames.includes(portfolioName)) {
             navigate('/error');
         }

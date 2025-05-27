@@ -46,7 +46,6 @@ function BurgerMenu({ isClosing, onAnimationEnd, onClose }) {
     const titles = [
         { text: "QAVO CODES", path: "/portfolio/qavo-codes" },
         { text: "QAVO AGENCY", path: "/portfolio/qavo-agency" },
-        { text: "QAVO ACADEMY", path: "/portfolio/qavo-academy" },
         { text: "BİZİM KOMANDA", path: "/our-team" },
         { text: "ƏLAQƏ", path: "/contact" },
     ];

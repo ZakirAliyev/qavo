@@ -15,9 +15,9 @@ function AdminLeftBar() {
 
     const isPortfolioSelected = location.pathname === '/cp/dashboard/portfolio';
     const isAgencyPortfolioSelected = location.pathname === '/cp/dashboard/agency-portfolio';
-    const isAcademyPortfolioSelected = location.pathname === '/cp/dashboard/academy-portfolio';
     const isTeamMemberSelected = location.pathname === '/cp/dashboard/team-member';
     const isSpin = location.pathname === '/cp/dashboard/spin';
+    const isBrandSelected = location.pathname === '/cp/dashboard/brands';
 
     return (
         <section id={"adminLeftBar"}>
@@ -41,18 +41,18 @@ function AdminLeftBar() {
                         <span>Qavo Agency</span>
                     </div>
                     <div
-                        className={`route ${isAcademyPortfolioSelected ? 'selected' : ''}`}
-                        onClick={() => navigate('/cp/dashboard/academy-portfolio')}
-                    >
-                        <PiStudent className={"iconZakir"}/>
-                        <span>Qavo Academy</span>
-                    </div>
-                    <div
                         className={`route ${isTeamMemberSelected ? 'selected' : ''}`}
                         onClick={() => navigate('/cp/dashboard/team-member')}
                     >
                         <AiOutlineTeam className={"iconZakir"}/>
                         <span>Team member</span>
+                    </div>
+                    <div
+                        className={`route ${isBrandSelected ? 'selected' : ''}`}
+                        onClick={() => navigate('/cp/dashboard/brands')}
+                    >
+                        <AiOutlineTeam className={"iconZakir"}/>
+                        <span>Brendlər</span>
                     </div>
                     <div
                         className={`route ${isSpin ? 'selected' : ''}`}

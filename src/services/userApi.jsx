@@ -130,7 +130,25 @@ export const userApi = createApi({
                 url: `/SpinUsers?id=${id}`,
                 method: 'PUT',
             })
-        })
+        }),
+        getAllBrands: builder.query({
+            query: () => ({
+                url: `/Brends`,
+            }),
+        }),
+        postBrand: builder.mutation({
+            query: (data) => ({
+                url: `/Brends`,
+                method: 'POST',
+                body: (data),
+            }),
+        }),
+        deleteBrand: builder.mutation({
+            query: (id) => ({
+                url: `/Brends/${id}`,
+                method: 'DELETE',
+            }),
+        }),
     }),
 })
 export const {
@@ -151,5 +169,8 @@ export const {
     usePostTeamMemberMutation,
     usePostSpinUserMutation,
     useGetAllSpinUserQuery,
-    useSpinMarkAsReadMutation
+    useSpinMarkAsReadMutation,
+    useGetAllBrandsQuery,
+    usePostBrandMutation,
+    useDeleteBrandMutation,
 } = userApi

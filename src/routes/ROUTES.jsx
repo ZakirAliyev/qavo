@@ -55,11 +55,11 @@ export const ROUTES = [
                 element: <AdminPage/>,
             },
             {
-                path: 'cp/dashboard/academy-portfolio',
+                path: 'cp/dashboard/team-member',
                 element: <AdminPage/>,
             },
             {
-                path: 'cp/dashboard/team-member',
+                path: 'cp/dashboard/brands',
                 element: <AdminPage/>,
             },
             {

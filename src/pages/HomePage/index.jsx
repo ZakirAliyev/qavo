@@ -11,14 +11,12 @@ import OurTeamTitle from "../../components/CommonComponents/OurTeamTitle/index.j
 import Footer from "../../components/CommonComponents/Footer/index.jsx";
 import BurgerMenu from "../../components/CommonComponents/BurgerMenu/index.jsx";
 import AnimatedCursor from "react-animated-cursor";
+import LogoScroll from "../../components/CommonComponents/LogoScroll/index.jsx";
 
 function HomePage() {
     const [display, setDisplay] = useState(true);
     const [isBurgerOpen, setIsBurgerOpen] = useState(false);
     const [isBurgerClosing, setIsBurgerClosing] = useState(false);
-
-    // const {data: getAllProject} = useGetAllProjectQuery()
-    // const pro = getAllProject?.data
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -135,9 +133,10 @@ function HomePage() {
                     />
                     <Hero/>
                     <HeroBottom/>
-                    <Folder/>
+                    <LogoScroll/>
                     <Crafting/>
                     <Skills/>
+                    <Folder/>
                     <Information/>
                     <OurTeamTitle/>
                     <Footer/>
