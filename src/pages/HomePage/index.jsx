@@ -133,10 +133,10 @@ function HomePage() {
                     />
                     <Hero/>
                     <HeroBottom/>
+                    <Folder/>
                     <LogoScroll/>
                     <Crafting/>
                     <Skills/>
-                    <Folder/>
                     <Information/>
                     <OurTeamTitle/>
                     <Footer/>
