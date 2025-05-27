@@ -7,6 +7,7 @@ import {PulseLoader} from 'react-spinners';
 import Swal from 'sweetalert2';
 import image1 from "/src/assets/spinImage.png";
 import image2 from "/src/assets/spin2.png";
+import image3 from "/src/assets/xanSekil.jpg";
 import Footer from "../../components/CommonComponents/Footer/index.jsx";
 
 const sectors = [
@@ -274,6 +275,41 @@ const SpinPage = () => {
                         </div>
                     </div>
                 </div>
+                <div className="wrapper">
+                    <div className="row">
+                        <div className="col-6 col-md-6 col-sm-12 col-xs-12">
+                            <div className="row">
+                                <div className="col-12 span" style={{
+                                    color: '#656565',
+                                    fontWeight: '500',
+                                    marginBottom: '10px',
+                                }}>
+                                    TƏLİM MÜDDƏTİ: 2.5 ay / DƏRS SAATI: 45 saat / TƏDRİS: OFFLİNE
+                                </div>
+                            </div>
+                            <h2>VİDEO MONTAJA BAŞLA</h2>
+                            <h2>YARADICI GÜCÜNÜ</h2>
+                            <h2 style={{margin: '0 0 20px 0'}}>KADRLA GÖSTƏR</h2>
+                            <div className="row">
+                                <div className="col-12 span1" style={{
+                                    color: '#583199',
+                                    fontWeight: '800',
+                                    marginBottom: '10px',
+                                    background: 'white',
+                                    width: 'max-content',
+                                    padding: '5px 10px',
+                                    paddingTop: '7px',
+                                    borderRadius: '5px',
+                                }}>
+                                    TƏLİMÇİ: XAN CƏLİLOV
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-6 col-md-6 col-sm-12 col-xs-12 imageWrapper">
+                            <img src={image3} alt="Graphic Design"/>
+                        </div>
+                    </div>
+                </div>
                 <div className="wrapper" style={{filter: isLoading ? 'blur(5px)' : 'none', marginBottom: '80px'}}>
                     <div className="row">
                         <div className="col-6 col-md-6 col-sm-12 col-xs-12">
@@ -347,6 +383,21 @@ const SpinPage = () => {
                                             on novidades={() => handleRadioChange('QRAFİK DİZAYN')}
                                         />
                                         <label>QRAFİK DİZAYN</label>
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div
+                                        className={formData.lessonName === 'VİDEO MONTAJ' ? 'inputRadio selected' : 'inputRadio'}
+                                        onClick={() => handleRadioChange('VİDEO MONTAJ')}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name="lesson"
+                                            value="VİDEO MONTAJ"
+                                            checked={formData.lessonName === 'VİDEO MONTAJ'}
+                                            on novidades={() => handleRadioChange('VİDEO MONTAJ')}
+                                        />
+                                        <label>VİDEO MONTAJ</label>
                                     </div>
                                 </div>
                                 <div className="row">
